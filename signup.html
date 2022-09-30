@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign up</title>
+    <script type="module" src="./js/index.js" defer></script>
+    <script type="module" src="./js/signup.js" defer></script>
+  </head>
+
+  <body class="text-center">
+    <h1 class="text-center pb-20">Sign up</h1>
+
+    <div class="bg-purple-200 p-10 w-60 m-auto">
+
+    <form id="sign-up-form" class="flex flex-col w-40 gap-8">
+      <label for="username">User name</label>
+        <input type="text" name="username" id="username">
+        <span id="username-message"></span>
+
+      <label for="email">Email</label>
+        <input type="text" name="email" id="email">
+        <span id="email-message"></span>
+
+      <label for="password">Password</label>
+        <input type="password" name="password" id="password">
+        <span id="password-message"></span>
+
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" name="confirm-password" id="confirm-password">
+        <span id="confirm-password-message"></span>
+
+
+        <button class="bg-red-500 p-4 rounded-lg" id="sign-up-button" type="submit">Submit</button>
+    </form>
+
+  </div>
+
+
+
+  </body>
+</html>

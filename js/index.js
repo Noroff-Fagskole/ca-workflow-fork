@@ -1,4 +1,4 @@
-import './style.css'
+import '../style.css'
 
 
 
@@ -20,7 +20,7 @@ function submitForm(e) {
     }
 };
 
-logInForm.addEventListener("submit", submitForm);
+//logInForm.addEventListener("submit", submitForm);
 
 function logIn(email, password) {
     fetch('https://nf-api.onrender.com/api/v1/social/auth/login', {
@@ -43,4 +43,4 @@ function logIn(email, password) {
  const myemail = `solveig.rebnord@noroff.no`;
  const mypassword = `Solveig123`;
 
- logIn(myemail, mypassword);
+ //logIn(myemail, mypassword);
