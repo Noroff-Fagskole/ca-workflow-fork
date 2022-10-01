@@ -8,6 +8,7 @@ export default {
                 signUp: resolve(__dirname, 'signup.html'),
                 logIn: resolve(__dirname, 'login.html'),
                 feed: resolve(__dirname, 'feed.html'),
+                singlePost: resolve(__dirname, 'post.html'),
             },
         },
     },
