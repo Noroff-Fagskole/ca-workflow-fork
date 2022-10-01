@@ -1,13 +1,16 @@
-import { ALL_POSTS_URL } from "./endpoints/api";
+import { ALL_POSTS_ADDITIONAL_URL } from "./endpoints/api";
 import { getToken } from "./storage/storage";
 
 const feed = document.getElementById("allposts");
+
+const queryString = window.location.search;
+console.log(queryString);
 
 
 (async function allPosts() {
     
     try {
-        const response = await fetch(ALL_POSTS_URL, {
+        const response = await fetch(ALL_POSTS_ADDITIONAL_URL, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${getToken()}`,
@@ -108,9 +111,13 @@ function listPosts (data) {
         fullComment = "No comments"; //se om du vil ha tomt eller hva
     }
 
+
+    
+
   
         onePost = 
-        `<div class="p-6 mb-4 bg-gray-100 max-w-md">
+        `<a href="post.html?id=${id}">
+        <div class="p-6 mb-4 bg-gray-100 max-w-md">
         <h2 class="pb-2 text-xl font-bold">${title}</h2>
         <p>${content}</p>
         <ul>${tags}</ul>
@@ -121,11 +128,9 @@ function listPosts (data) {
 
         ${fullComment}
         </div>
+        </a>
         `
 
         feed.innerHTML += onePost;
     }
-
-
-
 }
