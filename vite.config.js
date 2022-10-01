@@ -7,6 +7,7 @@ export default {
                 home: resolve(__dirname, 'index.html'),
                 signUp: resolve(__dirname, 'signup.html'),
                 logIn: resolve(__dirname, 'login.html'),
+                feed: resolve(__dirname, 'feed.html'),
             },
         },
     },
