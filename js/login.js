@@ -1,7 +1,7 @@
 console.log("from login js");
 
 import { LOG_IN_URL } from "./endpoints/api";
-import { logInUser } from "./storage/storage";
+import { saveToken,saveUser } from "./storage/storage";
 
 const logInForm = document.getElementById("login-form")
 const emailInput = document.getElementById("email");
@@ -80,7 +80,8 @@ function logIn (event) {
                 accessToken = data.accessToken;
                 username = data.name;
                 console.log(accessToken);
-                logInUser(username, accessToken);
+                saveToken(accessToken);
+                saveUser(username);
                 //window.location.replace('/index.html');
             }
 
