@@ -1,4 +1,4 @@
-// sender bruekren til post.html/id på posten, men i den redirecten må det være en fetch av posten med id som viser innholdet vi ønsker. Altså snakker id en til både hvilket innhold som skal hentes, hva vi skal kalle urlen/siden
+
 
 import { ALL_POSTS_URL } from "./endpoints/api";
 
