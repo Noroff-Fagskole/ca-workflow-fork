@@ -120,4 +120,4 @@ async function deletePost(id) {
     }
 };
 
-deletePost(73);
+//deletePost(id);
