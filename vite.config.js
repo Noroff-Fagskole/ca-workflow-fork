@@ -9,6 +9,7 @@ export default {
                 logIn: resolve(__dirname, 'login.html'),
                 feed: resolve(__dirname, 'feed.html'),
                 singlePost: resolve(__dirname, 'post.html'),
+                postEditor: resolve(__dirname, 'editor.html'),
             },
         },
     },
