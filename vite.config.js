@@ -10,6 +10,7 @@ export default {
                 feed: resolve(__dirname, 'feed.html'),
                 singlePost: resolve(__dirname, 'post.html'),
                 postEditor: resolve(__dirname, 'editor.html'),
+                profiles: resolve(__dirname, 'profiles.html'),
             },
         },
     },

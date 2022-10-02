@@ -1,8 +1,8 @@
 
-export {saveToken, saveUser, getToken}
+export {saveToken, saveUser, getToken, getUsername}
 
 const accessToken = "token";
-let username;
+const username = "username";
 
 
 function saveToken(token) {
@@ -21,6 +21,10 @@ function saveToStorage(key, value) {
 function getToken() {
     //console.log(getStoredData(accessToken));
     return getStoredData(accessToken);
+}
+
+function getUsername() {
+    return getStoredData(username)
 }
 
 
