@@ -19,5 +19,7 @@ const ALL_PROFILES_URL = API_BASE_URL + "api/v1/social/profiles/";
 
 const queryStringProfileInfo = "?_posts=true&_following=true&_followers=true";
 
+const queryStringPosts = "?_posts=true";
 
-export {SIGN_UP_URL, LOG_IN_URL, ALL_POSTS_URL, ALL_POSTS_ADDITIONAL_URL, ALL_PROFILES_URL, queryStringProfileInfo};
+
+export {SIGN_UP_URL, LOG_IN_URL, ALL_POSTS_URL, ALL_POSTS_ADDITIONAL_URL, ALL_PROFILES_URL, queryStringProfileInfo, queryStringPosts};

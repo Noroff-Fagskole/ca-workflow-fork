@@ -11,6 +11,7 @@ export default {
                 singlePost: resolve(__dirname, 'post.html'),
                 postEditor: resolve(__dirname, 'editor.html'),
                 profiles: resolve(__dirname, 'profiles.html'),
+                myProfile: resolve(__dirname, 'myprofile.html'),
             },
         },
     },
