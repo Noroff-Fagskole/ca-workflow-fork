@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My page</title>
+    <script type="module" src="./js/index.js" defer></script>
+    <script type="module" src="./js/myprofile.js" defer></script>
+  </head>
+  <body>
+    <h1 class="text-2xl font-bold text-center p-20">My page</h1>
+
+    <section id="my-posts" class="w-fit m-auto">
+        <h2 class="pb-8 text-2xl font-bold">My posts</h2>
+    </section>
+
+    <section id="edit-section" class="hidden">
+        <form id="edit-form" class="bg-purple-100 p-10 flex flex-col w-2/4 m-auto gap-4">
+            <label for="title">Title</label>
+            <input type="text" name="title" id="title" required class="border-gray-500 border-2">
+            <label for="content">Content</label>
+            <textarea name="body" id="body" class="border-gray-500 border-2"></textarea>
+            <button id="submit-change-button" class="bg-green-400 px-8 py-4 w-fit rounded-md m-auto">Ok</button>
+        </form>
+    `
+    </section>
+
+
+
+  </body>
+</html>
