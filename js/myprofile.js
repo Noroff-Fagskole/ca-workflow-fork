@@ -103,55 +103,30 @@ function listPosts ({posts}) {
 
         const editButtons = document.getElementsByClassName("editButton");
 
+        let buttonId;
 
         for (let button of editButtons) {
             button.addEventListener("click", function (event) {
                 event.preventDefault();
-                let buttonId = button.id;
+                buttonId = button.id;
                 console.log(buttonId);
-                getPost(buttonId);
+                editPost(buttonId, post);
             })
+         
         }
+        
     }
 }
 
 
-async function getPost(id) {
-    
-    try {
-        const response = await fetch(`${ALL_POSTS_URL}/${id}`, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${getToken()}`,
-            },
-        })
 
-        const data = await response.json();
-
-        if (response.ok) {
-            console.log("success");
-            //console.log(data);
-            editPost(data);
-        }
-
-        else {
-            console.log("error", data)
-        }
-    }
-
-    catch (error) {
-        console.log(error);
-    }
-
-};
-
-function editPost (data) {
+function editPost (id, data) {
     //console.log(data);
 
     let validForm = false;
     editSection.classList.remove("hidden");
 
-    const postID = data.id;
+    const postID = id;
 
     if (data.title) {
         titleInput.value = data.title;
@@ -164,34 +139,27 @@ function editPost (data) {
     let alteredTitle;
     let alteredContent;
 
-    editForm.addEventListener('change', function(event) {
-        //console.log(event.target.value);
+    submitChangeButton.addEventListener("click", function (event) {
         event.preventDefault();
+        console.log(postID);
         alteredTitle = titleInput.value;
         alteredContent = contentInput.value;
-        updateBody(alteredTitle, alteredContent);
-    });
-    
-    
- 
+        const theBody = updateBody(alteredTitle, alteredContent);
+        console.log(theBody);
+        requestChange(theBody, postID);
+    })  
     
     let updatedBody;
 
-    function updateBody (title, content) {
 
+    function updateBody (title, content) {
         updatedBody = {
             title: `${title}`,
             body: `${content}`
         }
         console.log(updatedBody);
         let jsonBody =  JSON.stringify(updatedBody);
-        
-
-        submitChangeButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            console.log(postID);
-            requestChange(jsonBody, postID);
-        })  
+        return jsonBody;
     }
 }
 
@@ -213,6 +181,8 @@ async function requestChange(body, id) {
         if (response.ok) {
             console.log("success");
             //console.log(data);
+            
+            window.location.reload();
         }
 
         else {
