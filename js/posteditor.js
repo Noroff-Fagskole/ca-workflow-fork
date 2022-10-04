@@ -61,7 +61,6 @@ function validatePost () {
     }
 }
 
-
 async function requestPost(body) {
     try {
         const response = await fetch(ALL_POSTS_URL, {
@@ -89,11 +88,6 @@ async function requestPost(body) {
     }
 }
 
-
-
-
-
-
 async function deletePost(id) {
     try {
         const response = await fetch(`${ALL_POSTS_URL}/${id}`, {
@@ -119,5 +113,6 @@ async function deletePost(id) {
         console.log(error);
     }
 };
+
 
 //deletePost(id);

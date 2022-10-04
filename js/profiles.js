@@ -10,10 +10,47 @@ const showNumberFollowing = document.getElementById("number-of-following");
 const showNumberFollowers = document.getElementById("number-of-followers");
 
 
+const profileUser = getUsername();
+
+const profileInfoURL = `${ALL_PROFILES_URL}${profileUser}${queryStringProfileInfo}`;
+//console.log(profileInfoURL);
 
 
+async function myInfo() {
 
-(async function allProfiles() {
+    try {
+        const response = await fetch(profileInfoURL, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            },
+        })
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log("success");
+            console.log(data);
+            allProfiles(data);
+            showFollowing(data);
+            showFollowers(data);
+            catchData(data);
+        }
+
+        else {
+            console.log("error", data)
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+};
+
+myInfo();
+
+
+async function allProfiles(profileData) {
     
     try {
         const response = await fetch(ALL_PROFILES_URL, {
@@ -27,29 +64,39 @@ const showNumberFollowers = document.getElementById("number-of-followers");
 
         if (response.ok) {
             console.log("success");
-            //console.log(data);
-            listProfiles(data);
+            console.log(profileData);
+            listProfiles(data, profileData);
+
         }
 
         else {
             console.log("error", data)
+            
         }
     }
 
     catch (error) {
         console.log(error);
+      
     }
-
-})();
-
+};
 
 
-
-function listProfiles (data) {
+function listProfiles (data, profileData) {
 
     console.log(data);
 
-    let oneProfile;
+    console.log(profileData);
+
+    let meFollowing = profileData.following;
+    let nameArray = [];
+    for (let follower of meFollowing) {
+        nameArray.push(follower.name);
+    }
+    console.log(nameArray); //array av mine followers
+     
+
+    let oneProfile = "";
 
     let name;
     let email;
@@ -66,17 +113,25 @@ function listProfiles (data) {
     if (profile.email) {
         email = profile.email;
     }
-   
-    if (profile.banner) {
-        banner = profile.banner
+
+    if (profile.banner === "") {
+        profile.banner = "https://i.imgur.com/M3m9Y3W.png";
     }
+
+    if (profile.banner) {
+        banner = profile.banner;
+    }
+
+    if (profile.avatar === "") {
+        profile.avatar = "https://i.imgur.com/0D99Xsk.png";
+    }
+   
     if (profile.avatar) {
         avatar = profile.avatar
     }
 
 
     oneProfile = 
-
         `
         <div class="p-6 mb-4 bg-gray-100 max-w-md flex flex-col items-center">
         <h2 class="pb-2 text-xl font-bold">${name}</h2>
@@ -84,7 +139,7 @@ function listProfiles (data) {
         <figure><img class="w-40 h-40 rounded-full" src=${avatar}></figure> 
         <figure><img class="w-40 h-40" src=${banner}></figure>
         <button id="${name}" class="followButton bg-yellow-300 p-2">Follow</button>
-        <button id="${name}" class="unfollowButton bg-red-300 p-2">Unfollow</button>
+        <button id="${name}" class="unfollowButton hidden bg-red-300 p-2">Unfollow</button>
         </div>
         `
         profilesOutPut.innerHTML += oneProfile;
@@ -93,65 +148,38 @@ function listProfiles (data) {
     const followButtons = document.getElementsByClassName("followButton");
     const unfollowButtons = document.getElementsByClassName("unfollowButton");
 
+ 
+
     for (let button of followButtons) {
+        let buttonId = button.id;
+        if (nameArray.includes(buttonId)){
+            console.log(buttonId);
+            button.innerHTML = `<button id="${name}" disabled class="followButton bg-gray-300 disabled">Following</button>`;
+        }
         button.addEventListener("click", function (event) {
             event.preventDefault();
-            let buttonId = button.id;
+            // hvis button id(navnet på person) er i arrayen av mine følere, så disable button  
             followProfile(buttonId);
+            myInfo();
         })
     } // JAAAA FOR FAEN I HELVETE EG EIAR
 
+
+
     for (let button of unfollowButtons) {
-        button.addEventListener("click", function (event) {
-            event.preventDefault();
-            let buttonId = button.id;
-            unfollowProfile(buttonId);
-        })
+        let buttonId = button.id;
+
+        if (nameArray.includes(buttonId)) {
+            button.classList.remove("hidden");
+
+            button.addEventListener("click", function (event) {
+                event.preventDefault();
+                unfollowProfile(buttonId);
+            })
+        }
+       
     } 
 }
-
-
-
-
-
-
-const profileUser = getUsername();
-
-const profileInfoURL = `${ALL_PROFILES_URL}${profileUser}${queryStringProfileInfo}`;
-//console.log(profileInfoURL);
-
-(async function myInfo() {
-
-    try {
-        const response = await fetch(profileInfoURL, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${getToken()}`,
-            },
-        })
-
-        const data = await response.json();
-
-        if (response.ok) {
-            console.log("success");
-            console.log(data);
-            showFollowing(data);
-            showFollowers(data);
-        }
-
-        else {
-            console.log("error", data)
-        }
-    }
-
-    catch (error) {
-        console.log(error);
-    }
-
-})();
-
-
-
 
 
 function showFollowing({following}) { 
@@ -192,10 +220,9 @@ function showFollowing({following}) {
 };
 
 
+function showFollowers({followers}) { 
 
-function showFollowers({followers}) { // TODO denne er bare god for en profil nå, må ha for loop
-
-    console.log(followers); // er en array med objekter, har bare ett nå
+    console.log(followers); 
 
     
     let numberOfFollowers = followers.length;
@@ -231,18 +258,6 @@ function showFollowers({followers}) { // TODO denne er bare god for en profil n�
 };
 
 
-
-
-
-
-//const queryStringFollow = "follow";
-//const profileName = "tullius";
-
-//const followURL = `${ALL_PROFILES_URL}${profileName}/${queryStringFollow}`;
-
-//console.log(followURL);
-
-
 async function followProfile(profileName) {
 
     try {
@@ -257,7 +272,8 @@ async function followProfile(profileName) {
 
         if (response.ok) {
             console.log("success");
-            console.log(data);
+            //console.log(data);
+
         }
 
         else {
@@ -300,11 +316,3 @@ async function unfollowProfile(profileName) {
 
 };
 
-
-
-
-
-
-
-
-//console.log(data["followers"]);

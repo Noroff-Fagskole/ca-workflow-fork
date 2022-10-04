@@ -1,6 +1,4 @@
 
-export {saveToken, saveUser, getToken, getUsername}
-
 const accessToken = "token";
 const username = "username";
 
@@ -34,7 +32,4 @@ function getStoredData(key) {
     return JSON.parse(data);
 }
 
-
-
-// nå er funksjonen bundet til log in. Heller få til separate save, delete, endre locale storage funksjoner. 
-//Kunne sende token til andre funksjoner
+export {saveToken, saveUser, getToken, getUsername}

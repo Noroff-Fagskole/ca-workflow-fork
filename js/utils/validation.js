@@ -1,9 +1,8 @@
+
 function validateEmail(email) {
     const regEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@(stud.noroff.no|noroff.no)$/;
     return email.match(regEx) ? true : false;
 }
-
-
 
 function validatePassword(password) {
     let number = 8;
@@ -27,7 +26,6 @@ function confirmingPassword(password, confirmPassword) {
         return true;
     }
 }
-
 
 
 export {validateEmail, validatePassword, confirmingPassword}
