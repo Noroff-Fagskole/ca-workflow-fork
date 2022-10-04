@@ -13,6 +13,45 @@ const contentInput = document.getElementById("body");
 const submitChangeButton = document.getElementById("submit-change-button");
 
 
+async function myData() {
+
+    let myBody = {
+        "banner": "stilig",
+        "avatar": "funk"
+    }
+
+    let myJSINBody = JSON.stringify(myBody);
+    
+    try {
+        const response = await fetch(`https://nf-api.onrender.com/api/v1/social/profiles/Sara/media`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                banner: "https://cdn.pixabay.com/photo/2016/05/05/02/37/sunset-1373171_1280.jpg",
+                avatar: "https://cdn.pixabay.com/photo/2016/05/05/02/37/sunset-1373171_1280.jpg"
+            }),
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        })
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log("success");
+            console.log(data);
+        }
+        else {
+            console.log("error", data)
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+}; // Ikke i bruk, funksjon for å endre profile media
+
+
 (async function myPosts() {
     
     try {
@@ -41,7 +80,6 @@ const submitChangeButton = document.getElementById("submit-change-button");
     }
 
 })();
-
 
 function listPosts ({posts}) {
     console.log(posts);
@@ -98,7 +136,6 @@ function listPosts ({posts}) {
         <button id="${id}" class="editButton bg-red-300 p-2 rounded-md">Edit</button>
         </div>
         `
-
         myPosts.innerHTML += onePost;
 
         const editButtons = document.getElementsByClassName("editButton");
@@ -112,13 +149,9 @@ function listPosts ({posts}) {
                 console.log(buttonId);
                 editPost(buttonId, post);
             })
-         
         }
-        
     }
 }
-
-
 
 function editPost (id, data) {
     //console.log(data);
@@ -163,7 +196,6 @@ function editPost (id, data) {
     }
 }
 
-
 async function requestChange(body, id) {
     
     try {
@@ -181,10 +213,8 @@ async function requestChange(body, id) {
         if (response.ok) {
             console.log("success");
             //console.log(data);
-            
             window.location.reload();
         }
-
         else {
             console.log("error", data)
         }
@@ -195,3 +225,4 @@ async function requestChange(body, id) {
     }
 
 };
+

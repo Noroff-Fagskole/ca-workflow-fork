@@ -43,7 +43,6 @@ const showPost = document.getElementById("single-post");
     }
 })();
 
-
 function listPost (data) {
 
     //console.log(data);

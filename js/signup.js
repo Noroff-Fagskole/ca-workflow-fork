@@ -2,8 +2,6 @@ import { SIGN_UP_URL } from "./endpoints/api";
 //console.log(SIGN_UP_URL);
 import { validateEmail, validatePassword,confirmingPassword } from "./utils/validation";
 
-
-
 const signUpForm = document.getElementById("sign-up-form");
 
 const username = document.getElementById("username");
@@ -126,40 +124,35 @@ function signUp (e) {
 
     const inJSON = JSON.stringify(signUpBody);
 
-    const fetchInfo = `method: "POST",
-    headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-    },
-    body: ${inJSON},`
+    register(inJSON);
 
-    console.log(fetchInfo);
-
-    (async function register() {
-        try {
-            const response = await fetch(SIGN_UP_URL, {
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-                body: inJSON,
-              })
-            
-              const data = await response.json();
-
-              if (response.ok) {
-                console.log("success");
-                console.log(data);
-                //window.location.replace('/index.html')
-              }
-
-              else {
-                console.log("error", data)
-                //Si ifra til bruker
-              }
-        }
-        
-        catch (error) {
-            console.log(error);
-        }
-    })();
 }
+
+async function register(body) {
+    try {
+        const response = await fetch(SIGN_UP_URL, {
+            method: "POST",
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+            body: body,
+          })
+        
+          const data = await response.json();
+
+          if (response.ok) {
+            console.log("success");
+            console.log(data);
+            //window.location.replace('/index.html')
+          }
+
+          else {
+            console.log("error", data)
+            //Si ifra til bruker
+          }
+    }
+    
+    catch (error) {
+        console.log(error);
+    }
+};
