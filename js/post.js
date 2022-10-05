@@ -1,4 +1,4 @@
-
+import '../style.css'
 
 import { ALL_POSTS_URL } from "./endpoints/api";
 

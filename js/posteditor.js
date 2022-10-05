@@ -1,3 +1,4 @@
+import '../style.css'
 import { ALL_POSTS_URL } from "./endpoints/api";
 import { getToken } from "./storage/storage";
 

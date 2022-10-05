@@ -27,9 +27,12 @@ function getUsername() {
 
 
 function getStoredData(key) {
-    const data = localStorage.getItem(key);
-    //console.log(data);
-    return JSON.parse(data);
+    const value = localStorage.getItem(key);
+    if (value) {
+        return JSON.parse(value); // convert to JS
+    } else {
+        return null;
+    }
 }
 
 export {saveToken, saveUser, getToken, getUsername}

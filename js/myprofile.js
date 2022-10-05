@@ -1,3 +1,4 @@
+import '../style.css'
 import { ALL_POSTS_URL, ALL_PROFILES_URL, queryStringPosts } from "./endpoints/api";
 import { getUsername, getToken } from "./storage/storage";
 
