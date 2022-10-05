@@ -1,5 +1,4 @@
-console.log("from login js");
-
+import '../style.css'
 import { LOG_IN_URL } from "./endpoints/api";
 import { saveToken,saveUser } from "./storage/storage";
 

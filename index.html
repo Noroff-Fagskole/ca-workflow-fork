@@ -5,10 +5,28 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
-    <script type="module" src="./js/index.js" defer></script>
+    <script type="module" src="./js/utils/components.js" defer></script>
   </head>
   <body>
-    <h1 class="italic">YEYYYYY</h1>
+    <header class="h-20 bg-orange-200">
+      <nav id="nav" class="flex flex-row justify-between"></nav>
+    </header>
+    
+    <main class="mx-32 mt-24 flex flex-row justify-between">
+
+      <section>
+        <section id="choose-view" class="flex flex-row gap-6 text-xl pb-12">
+          <button id="show-posts" disabled>Posts</button>
+          <span>|</span>
+          <button id="show-profiles">Profiles</button>
+        </section>
+  
+        <section id="feed" class="w-fit flex flex-col gap-4"></section>
+      </section>
+      <section id="usersData"></section>
+    </main>
+
+
 
 
 

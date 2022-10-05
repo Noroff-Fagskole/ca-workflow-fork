@@ -1,3 +1,4 @@
+import '../style.css'
 import { SIGN_UP_URL } from "./endpoints/api";
 //console.log(SIGN_UP_URL);
 import { validateEmail, validatePassword,confirmingPassword } from "./utils/validation";

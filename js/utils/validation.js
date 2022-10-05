@@ -27,5 +27,12 @@ function confirmingPassword(password, confirmPassword) {
     }
 }
 
+function checkAccess(access) {
+    if (access === null) {
+     console.log("bad token")
+     window.location.replace("/login.html");
+    }
+ };
 
-export {validateEmail, validatePassword, confirmingPassword}
+
+export {validateEmail, validatePassword, confirmingPassword, checkAccess}
