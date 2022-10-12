@@ -1,24 +1,28 @@
 import '../style.css'
-import { ALL_POSTS_ADDITIONAL_URL } from "./endpoints/api";
+import { ALL_POSTS_URL } from "./endpoints/api";
 import { ALL_PROFILES_URL, queryStringProfileInfo } from "./endpoints/api";
 import { getToken, getUsername } from "./storage/storage";
-import { checkAccess } from './utils/validation';
+import { checkAccess, confirmingPassword } from './utils/validation';
 import {myInfo} from './utils/request-functions';
+import { postComment } from './utils/request-functions';
+
+import {myHeader} from './utils/header.js';
+import { zip } from 'lodash';
+
+
+const dayjs = require('dayjs')
+//import dayjs from 'dayjs' // ES 2015
+
+
+var relativeTime = require('dayjs/plugin/relativeTime')
+dayjs.extend(relativeTime);
+
+
+
 
 checkAccess(getToken());
 
-const myData = myInfo();
-console.log("myData  ",myData);
-
-
-function getInfo() {
-    const resolved = Promise.resolve(myInfo());
-    resolved.then((value) => {
-        //console.log(value);
-        usersData(value);
-        //Kjøre funksjonen som skal liste profildata
-    })
-};
+myHeader();
 
 
 const feed = document.getElementById("feed");
@@ -26,8 +30,10 @@ const feed = document.getElementById("feed");
 const showPosts = document.getElementById("show-posts");
 const showProfiles = document.getElementById("show-profiles");
 
+
+
 showPosts.addEventListener("click", function() {
-    console.log("posts");
+    //console.log("posts");
     feed.innerHTML = "";
     allPosts();
     showPosts.disabled = true;
@@ -35,9 +41,9 @@ showPosts.addEventListener("click", function() {
 })
 
 showProfiles.addEventListener("click", function() {
-    console.log("profiles");
+    //console.log("profiles");
     feed.innerHTML = "";
-    allProfiles();
+    profileInfoForListing();
     showPosts.disabled = false;
     showProfiles.disabled = true;
 })
@@ -48,11 +54,47 @@ const queryString = window.location.search;
 
 const userSection = document.getElementById("usersData");
 
-function usersData(data) {
+
+
+function userProfile() {
+    myInfo().then((value) => {
+        listProfileData(value);
+    })
+};
+userProfile();
+
+
+function listProfileData(data) {
     console.log(data);
+
+    let profileImg = data.banner;
+    let profileName = data.name;
+    let followers = data.followers.length;
+    let following = data.following.length;
+
+    userSection.innerHTML = 
+    
+    `<a href="myprofile.html">
+    <div class="flex flex-col items-center p-6 gap-6 shadow-md rounded-md cursor-pointer fixed right-24">
+        <figure class="w-44 h-44">
+            <img class="h-full rounded-full object-cover shadow-md border border-white" src="${profileImg}">
+        </figure>
+        <p class="text-2xl tracking-wide font-josefine">${profileName}</p>
+        <div class="flex flex-row font-robotoC font-extralight gap-6 text-sm">
+            <div class="flex flex-col items-center">
+                <span class="font-normal text-2xl font-josefine">${followers}</span>
+                <p class="border rounded-md w-24 py-3 text-center">Followers</p>
+            </div>
+            <div class="flex flex-col items-center">
+                <span class="font-normal text-2xl font-josefine">${following}</span>
+                <p class="border rounded-md w-24 py-3 text-center">Following</p>
+            </div>
+        </div>
+    </div>
+    </a>
+    `
 }
 
-usersData();
 
 
 
@@ -60,7 +102,7 @@ usersData();
 async function allPosts() {
     
     try {
-        const response = await fetch(ALL_POSTS_ADDITIONAL_URL, {
+        const response = await fetch(`${ALL_POSTS_URL}/?_author=true&_comments=true&limit=40`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${getToken()}`,
@@ -70,9 +112,10 @@ async function allPosts() {
         const data = await response.json();
 
         if (response.ok) {
-            console.log("success");
-            console.log(data);
+            //console.log("success");
+            //console.log(data);
             listPosts(data);
+            sendposts(data)
         }
 
         else {
@@ -89,12 +132,32 @@ async function allPosts() {
 allPosts();
 
 
+
+
+const theArr = [];
+function sendposts(posts) {
+  
+    for (let post of posts) {
+        theArr.push(post)
+    }
+
+    return theArr;
+}
+
+console.log("hei",theArr)
+
+
+
+
 function listPosts (data) {
     console.log(data);
 
-    let onePost;
-    let fullComment;
 
+    for (let post of data) {
+
+
+    let onePost;
+    let allComments = "";
     let title;
     let content;
     let tags = [];
@@ -102,9 +165,8 @@ function listPosts (data) {
     let created;
     let updated;
     let id;
-    let info;
+    let creator;
 
-    for (let post of data) {
 
     if (post.title) {
         title = post.title;
@@ -121,9 +183,13 @@ function listPosts (data) {
     }
 
   
+    if (post.author["name"]) {
+        creator = post.author["name"];
+        //console.log(creator);
+    }
 
     if (post.media) {
-        media = `<img src="${post.media}">`
+        media = `<img class="w-fit max-h-52 box-content object-scale-down rounded-md" src="${post.media}">`
     }
 
     if (post.media === "") {
@@ -131,74 +197,138 @@ function listPosts (data) {
     }
 
     if (post.created) {
-        created = post.created
+        let time = dayjs().to(dayjs(post.created));
+        created = time;
     }
+
     if (post.updated) {
-        updated = post.updated
+        
+        let timeUpdated = dayjs().to(dayjs(post.updated));
+        if (timeUpdated !== created) {
+            updated =  `<img class="h-4" src="../../img/clock.png">Last updated ${timeUpdated}`;
+        }
+        else { updated = ""};
     }
     if (post.id) {
         id = post.id
     }
 
-    if (post._count["comments"]) {
-        let commentsArray = (post["comments"]); // får array med objektet/ene inni, kan jeg endre det i kallet på if
+    if (post.comments != "") {
+
+        console.log(post.comments);
+  
+       
+        let fullComment;
+        let commentsArray = post.comments;
         let commentContent;
         let commentId;
         let commenter;
         let originalPostId;
         let commentCreated;
-
+        
         for (let comment of commentsArray) {
 
             commentContent = comment.body;
             commentId = comment.id;
             commenter = comment.owner;
             originalPostId = comment.postId;
-            commentCreated = comment.created;
+            commentCreated = dayjs().to(dayjs(comment.created));
 
             fullComment =
-            `<div>
-                <p>${commentContent}, id: ${commentId}, made by: ${commenter}, original post id: ${originalPostId}, created: ${commentCreated}</p>
+            `<div class="flex flex-col gap-2 my-4 px-6 items-end odd:items-start">
+                <p class="uppercase font-normal">${commenter}</p>
+                <div class="flex flex-col items-end gap-2">
+                    <p class="bg-white px-8 py-2 w-fit rounded-md">${commentContent}</p>
+                    <p class="flex flex-row items-center gap-2 font-josefine text-sm font-light">
+                        ${commentCreated}
+                    </p>
+                </div>
             </div>
             `
+            allComments += fullComment;
         }
-
-        let amountComments = post._count["comments"];
-        //console.log(amountComments);
     }
+    else {allComments = `<p class="text-center">No comments yet, be the first!</p>`}
 
-    else {
-        fullComment = "No comments"; //se om du vil ha tomt eller hva
-    }
+
+
   
         onePost = 
-        `<a href="post.html?id=${id}">
-            <div class="border-2 border-pink-100 rounded-lg flex flex-row gap-12 p-6 w-3/5 justify-between items-center">
-                <div class="flex flex-col">
-                    <h2 class="text-xl font-bold">${title}</h2>
-                    <p>${content}</p>
-                    <ul>${tags}</ul>
-                    <p>${created}</p>
-                    <p>${updated}</p>
-                    <p>id: ${id}</p> <br>
-                    <span>${fullComment}</span>
+        `<div class="bg-white drop-shadow-md rounded-lg flex flex-col py-4 px-4 md:px-8 w-full h-fit gap-4">
+             <a href="post.html?id=${id}">
+                <div class="flex flex-col gap-4 p-4 w-full">
+                    <div class="flex flex-col gap-2 w-full">
+                        <h2 class="font-robotoC text-xl md:text-2xl uppercase font-normal tracking-wide w-max">${title}</h2>
+                        <p class="font-light text-sm"> //  ${creator}</p>
+                        <p class="flex flex-row items-center gap-2 font-josefine text-sm font-light w-max">
+                        <img class="h-4" src="../../img/clock.png">Posted ${created}
+                        </p>
+                        <p class="flex flex-row items-center gap-2 text-sm font-josefine font-extralight w-max">
+                            ${updated}
+                        </p>
+                        <hr class="w-full bg-mainBeige h-0.5">
+                        <p class="font-robotoC font-light text-md leading-snug max-w-sm py-4">${content}</p>
+                        <ul>${tags}</ul>
+                    </div>
+                    <div class=>
+                        <figure>
+                            ${media}
+                        </figure>
+                    </div>
                 </div>
-                <div class="max-w-xs"> 
-                    <figure class="h-max">
-                    ${media}
-                    </figure>
+                </a>
+                <div class="flex flex-col gap-8 w-full">
+                    <form id="${id}" class="commentForm flex flex-col gap-2">
+                        <input class="focus:border-none border border-mainBeige rounded-md w-full py-4 px-4 text-sm" type="text" name="comment" id="comment" placeholder="Comment on ${creator}s post">
+                        <button class="w-fit text-xs bg-mainBeige shadow-md py-2 px-4 rounded-md ml-auto">Comment</button>
+                    </form>
+                    <div class="font-robotoC font-light bg-mainBeige rounded-md p-2">${allComments}</div>
                 </div>
-            </div>
-        </a>`
+            </div>`
+  
         feed.innerHTML += onePost;
+   
+
+        
+      
+        let commentForms = document.getElementsByClassName("commentForm");
+        //console.log(commentForms);
+  
+        let requestBody;
+
+     
+
+        for (let form of commentForms) {
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+                let postId = form.id;
+                let commentContent = form[0].value;
+                    if (commentContent === "") {
+                        requestBody = null;
+                        console.log("oops")//vise feilmelding
+                    }
+                    else {
+                        requestBody = `{"body": "${commentContent}"}`;
+                       
+                    }
+                postComment(postId, requestBody);
+            })
+        }
     }
 }
 
 
-async function allProfiles() {
+function profileInfoForListing() {
+    myInfo().then((value) => {
+        allProfiles(value);
+    })
+};
+
+
+async function allProfiles(value) {
     
     try {
-        const response = await fetch(ALL_PROFILES_URL, {
+        const response = await fetch(`${ALL_PROFILES_URL}?_followers=true&_following=true&_posts=true&limit=50`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${getToken()}`,
@@ -208,8 +338,8 @@ async function allProfiles() {
         const data = await response.json();
 
         if (response.ok) {
-            console.log("success");
-            listProfiles(data);
+            //console.log("success");
+            listProfiles(data, value);
 
         }
 
@@ -226,9 +356,18 @@ async function allProfiles() {
 };
 
 
-function listProfiles (data) {
 
-    console.log(data);
+function listProfiles (data, value) {
+
+    console.log(data, value);
+    
+    let onlyNames = [];
+    let following = value.following;
+    console.log(following);
+    for (let person of following) {
+        onlyNames.push(person.name)
+    }
+    console.log(onlyNames)
 
     let oneProfile = "";
 
@@ -236,7 +375,13 @@ function listProfiles (data) {
     let email;
     let banner;
     let avatar;
-    let info;
+    let amountOfFollowers;
+    let followersHTML;
+    let amountOfFollowing;
+    let amountOfPosts;
+    let postsHTML;
+    let followButton;
+    let unFollowButton
 
     for (let profile of data) {
 
@@ -264,43 +409,169 @@ function listProfiles (data) {
         avatar = profile.avatar
     }
 
+    if (profile.followers) {
+       amountOfFollowers = profile.followers.length;
+        if(amountOfFollowers === 1) {
+            followersHTML = `<span class="font-semibold text-normal">${amountOfFollowers}</span> Follower`
+        }
+        else { followersHTML = `<span class="font-semibold text-normal">${amountOfFollowers}</span> Followers`}
+    }
+   
 
-    oneProfile = 
-        `
-        <div class="p-6 mb-4 bg-gray-100 max-w-md flex flex-col items-center">
-        <h2 class="pb-2 text-xl font-bold">${name}</h2>
-        <p>${email}</p>
-        <figure><img class="w-40 h-40 rounded-full" src=${avatar}></figure> 
-        <figure><img class="w-40 h-40" src=${banner}></figure>
-        <button id="${name}" class="followButton bg-yellow-300 p-2">Follow</button>
-        <button id="${name}" class="unfollowButton hidden bg-red-300 p-2">Unfollow</button>
-        </div>
-        `
-        feed.innerHTML += oneProfile;
+    if (profile.following) {
+        amountOfFollowing = profile.following.length;
+     }
+
+     if (profile.posts) {
+        amountOfPosts = profile.posts.length;
+        if (amountOfPosts === 1) {
+            postsHTML =  `<p><span class="font-semibold text-normal">${amountOfPosts}</span> Post</p>`
+        }
+        else {postsHTML =  `<p><span class="font-semibold text-normal">${amountOfPosts}</span> Posts</p>`}
+     }
+
+    let plass = onlyNames.indexOf(name);
+
+    if (plass !== -1) {
+        followButton = `<button id="${name}" disabled class="followButton bg-mainBeige py-2 px-4 rounded-full flex flex-row align-middle shadow-sm"><img class="h-5" src="../img/verified-user.png">Following</button>`;
+        unFollowButton = `<button id="${name}" class="unfollowButton hover:scale-105 bg-orange-100 py-2 px-4 rounded-full shadow-lg ">Unfollow</button>`
+    }
+    else {
+        followButton = `<button id="${name}" class="followButton bg-mainBeige py-2 px-6 rounded-full shadow-lg hover:scale-105">Follow</button>`;
+        unFollowButton = `<button id="${name}" class="unfollowButton hidden">Unfollow</button>`;
     }
 
+    //en if her omat hvis name er samme som i ifollowlisten så er det et annet classNamw
+
+
+    oneProfile = 
+        `<a href="profile.html?id=${name}">
+        <div class="pb-4 pt-4 px-4 mb-28 bg-white max-w-sm flex flex-col items-center rounded-md text-center font-robotoC font-light text-sm cursor-pointer">
+            
+            <div class="relative border-2 border-mainBeige w-48 h-48 rounded-md pt-8 flex flex-col gap-2 hover:shadow-lg">
+                <figure class="absolute -top-20 left-10">
+                    <img class="w-28 h-28 rounded-full  shadow-md hover:shadow-lg" src=${avatar}>
+                </figure> 
+                <h2 class="pt-4 text-xl font-semibold tracking-wide">${name}</h2>
+                <p class="text-sm pb-2">${email}</p>
+                <div>
+                    ${followersHTML}  |  Following ${amountOfFollowing}
+                </div>
+                ${postsHTML}
+            </div>
+            <div class="flex flex-row gap-4 mt-6">
+            ${followButton}
+            ${unFollowButton}
+            </div>
+        </div>
+        </a>
+        `
+        feed.innerHTML += oneProfile;
+        feed.classList.add("flex-wrap", "justify-between");
+        feed.classList.remove("flex-col");
+    }
+
+    //  
+   // <figure><img class="w-40 h-40" src=${banner}></figure>
     const followButtons = document.getElementsByClassName("followButton");
     const unfollowButtons = document.getElementsByClassName("unfollowButton");
 
  
+    followHandling(followButtons);
+    unFollowHandling(unfollowButtons);
+}
 
-    for (let button of followButtons) {
+
+
+
+
+function followHandling(buttons) {
+
+    for (let button of buttons) {
         let buttonId = button.id;
      
         button.addEventListener("click", function (event) {
             event.preventDefault();
             // hvis button id(navnet på person) er i arrayen av mine følere, så disable button  
             followProfile(buttonId);
+            button.classList.add("followingButton")
         })
     } // JAAAA FOR FAEN I HELVETE EG EIAR
+}
 
+function unFollowHandling(buttons) {
 
-    for (let button of unfollowButtons) {
+    for (let button of buttons) {
         let buttonId = button.id;
 
          button.addEventListener("click", function (event) {
-        event.preventDefault();
-        unfollowProfile(buttonId);
+            event.preventDefault();
+            unfollowProfile(buttonId);
         })
     } 
 }
+
+
+async function followProfile(profileName) {
+
+    try {
+        const response = await fetch(`${ALL_PROFILES_URL}${profileName}/follow`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            },
+        })
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log("success");
+            userProfile();
+            profileInfoForListing();
+
+        }
+
+        else {
+            console.log("error", data)
+        }
+    }
+
+    catch (error) {
+        console.log(error);
+    }
+
+};
+
+
+async function unfollowProfile(profileName) {
+
+    try {
+        const response = await fetch(`${ALL_PROFILES_URL}${profileName}/unfollow`, {
+            method: 'PUT',
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            },
+        })
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log("success");
+            userProfile();
+
+        }
+
+        else {
+            console.log("error", data)
+        }
+    }
+
+    catch (error) {
+        console.log(error);
+    }
+
+};
+
+
+
+

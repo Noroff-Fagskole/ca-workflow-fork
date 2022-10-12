@@ -1,5 +1,6 @@
 import { getUsername, getToken } from "../storage/storage";
 import { ALL_PROFILES_URL, queryStringProfileInfo } from "../endpoints/api";
+import { ALL_POSTS_URL } from "../endpoints/api";
 
 const profileUser = getUsername();
 
@@ -18,8 +19,8 @@ async function myInfo() {
         const data = await response.json();
 
         if (response.ok) {
-            console.log("success");
-            console.log(data);
+            //console.log("success");
+            //console.log(data);
             return data;
         }
 
@@ -32,10 +33,39 @@ async function myInfo() {
     }
 };
 
-const infomartion = myInfo().then(r => {
-    return r;
-})
-console.log("my info", infomartion);
 
-export {myInfo}
+
+async function postComment(postId, body) {
+    console.log(body,postId);
+    try {
+        const response = await fetch(`${ALL_POSTS_URL}/${postId}/comment`, {
+            method: 'POST',
+            body: body,
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+            
+        })
+
+        const data = await response.json();
+
+        if (response.ok) {
+            //console.log("success");
+            console.log(data);
+            
+        }
+
+        else {
+            console.log("error", data)
+        }
+    }
+    catch (error) {
+        console.log(error);
+    }
+};
+
+
+
+export {myInfo, postComment}
 

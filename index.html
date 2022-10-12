@@ -3,27 +3,39 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home</title>
-    <script type="module" src="./js/utils/components.js" defer></script>
+  
+    <script type="module" src="./js/utils/header.js" defer></script>
+    <script type="module" src="./js/index.js" defer></script>
+  
+
+  
+
+
   </head>
   <body>
-    <header class="h-20 bg-orange-200">
-      <nav id="nav" class="flex flex-row justify-between"></nav>
+    <header class="p-12 bg-mainBeige">
+      <nav id="nav" class="flex flex-row justify-between items-center"></nav>
     </header>
     
-    <main class="mx-32 mt-24 flex flex-row justify-between">
+    <main class="px-4 md:px-40 pt-12 pb-24 flex flex-row justify-between bg-mainBeige">
 
-      <section>
-        <section id="choose-view" class="flex flex-row gap-6 text-xl pb-12">
+      <section class="font-robotoC font-light">
+        <section id="choose-view" class="flex flex-row gap-6 text-xl pb-4 w-full pl-2">
           <button id="show-posts" disabled>Posts</button>
           <span>|</span>
           <button id="show-profiles">Profiles</button>
+          
         </section>
   
-        <section id="feed" class="w-fit flex flex-col gap-4"></section>
+        <section id="feed" class="flex flex-col w-full gap-6 pt-1"></section>
       </section>
-      <section id="usersData"></section>
+
+      <section id="usersData" class="relative hidden lg:inline-block"></section>
     </main>
 
 

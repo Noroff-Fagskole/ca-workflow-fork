@@ -1,4 +1,5 @@
 const {resolve} = require('path');
+import vitePluginRequire from "vite-plugin-require";
 
 export default {
     build: {
@@ -15,4 +16,11 @@ export default {
             },
         },
     },
+    plugins: [
+		vitePluginRequire({
+			// @fileRegex RegExp
+			// optional：default file processing rules are as follows
+			// fileRegex:/(.jsx?|.tsx?|.vue)$/
+		}),
+	],
 };

@@ -9,6 +9,8 @@ const passwordInput = document.getElementById("password");
 const emailMessage = document.getElementById("email-message");
 const passwordMessage = document.getElementById("password-message");
 
+const signUpButton = document.getElementById("signUpButton");
+
 logInForm.addEventListener("submit", logIn)
 
 function logIn (event) {
@@ -81,7 +83,7 @@ function logIn (event) {
                 console.log(accessToken);
                 saveToken(accessToken);
                 saveUser(username);
-                //window.location.replace('/index.html');
+                window.location.replace('/index.html');
             }
 
             else {
@@ -97,3 +99,8 @@ function logIn (event) {
         })();
     }
  }
+
+
+signUpButton.addEventListener("click", () => {
+    window.location.assign("signup.html");
+})
