@@ -3,38 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sign up</title>
+    <title>Sign up to SocialAPI</title>
+
     <script type="module" src="./js/signup.js" defer></script>
   </head>
 
-  <body class="text-center">
-    <h1 class="text-center pb-20">Sign up</h1>
+  <body class="bg-mainBeige">
+    <header class="px-12 pt-12 md:px-16 md:pt-16">
+      <a href="index.html"><img class="h-6 md:h-fit" src="./img/socialapi_logo.svg" alt="Logo"></a>
+    </header>
+    
+    <main class="mx-12 py-14 md:py-6">
+    
 
-    <div class="bg-purple-200 p-10 w-60 m-auto">
+      <h1 class="pb-24 lg:pb-16 text-center font-josefine text-3xl font-light">
+        Sign Up
+      </h1>
 
-    <form id="sign-up-form" class="flex flex-col w-40 gap-8">
-      <label for="username">User name</label>
-        <input type="text" name="username" id="username">
+
+
+    <form id="sign-up-form" class="m-auto flex flex-col w-full max-w-sm md:w-96 gap-4 md:gap-8 text-center font-robotoC font-light lg:gap-6">
+      <label for="username" class="flex flex-row gap-6 items-end whitespace-nowrap">
+        User name
+        <input type="text" name="username" id="username" class="bg-mainBeige border-b border-b-gray-400 focus:outline-none h-8 px-2 w-full text-lg">
+      </label>
         <span id="username-message"></span>
 
-      <label for="email">Email</label>
-        <input type="text" name="email" id="email">
+      <label for="email" class="flex flex-row gap-6 items-end whitespace-nowrap">
+        Email
+        <input type="text" name="email" id="email" class="bg-mainBeige border-b border-b-gray-400 focus:outline-none h-8 px-2 w-full text-lg">
+      </label>
         <span id="email-message"></span>
 
-      <label for="password">Password</label>
-        <input type="password" name="password" id="password">
+      <label for="password" class="flex flex-row gap-6 items-end whitespace-nowrap">
+        Password
+        <input type="password" name="password" id="password" class="bg-mainBeige border-b border-b-gray-400 focus:outline-none h-8 px-2 w-full text-lg">
+      </label>
         <span id="password-message"></span>
 
-        <label for="confirm-password">Confirm Password</label>
-        <input type="password" name="confirm-password" id="confirm-password">
+        <label for="confirm-password" class="flex flex-row gap-6 items-end whitespace-nowrap">
+          Confirm Password
+        <input type="password" name="confirm-password" id="confirm-password" class="bg-mainBeige border-b border-b-gray-400 focus:outline-none h-8 px-2 w-full text-lg">
+      </label>
         <span id="confirm-password-message"></span>
 
 
-        <button class="bg-red-500 p-4 rounded-lg" id="sign-up-button" type="submit">Submit</button>
+        <button class="w-fit m-auto py-2 px-10 mt-8 lg:mt-2 rounded-md border border-black shadow-md" id="sign-up-button" type="submit">Sign Up</button>
+        <span id="error-message"></span>
     </form>
 
-  </div>
+    <div class="flex flex-col items-center mt-24   font-robotoC font-light gap-2">
+        <p>Got an account after all?</p>
+        <a class="underline text-lg" href="login.html">Go back to log in</a>
+    </div>
+
+  
 
 
 

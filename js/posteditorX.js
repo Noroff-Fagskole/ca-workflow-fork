@@ -89,31 +89,7 @@ async function requestPost(body) {
     }
 }
 
-async function deletePost(id) {
-    try {
-        const response = await fetch(`${ALL_POSTS_URL}/${id}`, {
-            method: "DELETE",
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                Authorization: `Bearer ${getToken()}`,
-            },
-          })
-        
-          const data = await response.json();
-
-          if (response.ok) {
-            console.log("deleted");
-          }
-
-          else {
-            console.log("error", data)
-          }
-    }
-    
-    catch (error) {
-        console.log(error);
-    }
-};
-
 
 //deletePost(id);
+
+export {submitForm, validatePost, requestPost, deletePost};

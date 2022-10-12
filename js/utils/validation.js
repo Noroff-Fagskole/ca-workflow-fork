@@ -5,8 +5,7 @@ function validateEmail(email) {
 }
 
 function validatePassword(password) {
-    let number = 8;
-    if (password >= number) {
+    if (password.length >= 8) {
         return true;
     }
 }

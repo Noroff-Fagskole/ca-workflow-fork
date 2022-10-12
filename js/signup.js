@@ -15,6 +15,7 @@ const usernameMessage = document.getElementById("username-message");
 const emailMessage = document.getElementById("email-message");
 const passwordMessage = document.getElementById("password-message");
 const confirmPasswordMessage = document.getElementById("confirm-password-message");
+const errorMessage = document.getElementById("error-message")
 
 
 signUpForm.addEventListener("submit", function (event) {
@@ -35,7 +36,8 @@ function signUp (e) {
 
     if (usernameContent) {
         validUsername = true;
-        usernameMessage.innerHTML = "all good";
+        usernameMessage.innerHTML = "";
+        username.classList.add("text-green-600")
 
         if (usernameContent === " ") {
             validUsername = false;
@@ -55,8 +57,11 @@ function signUp (e) {
 
         if (validadedEmail) {
             validEmail = true;
+            emailMessage.innerHTML = "";
+            email.classList.add("text-green-600")
+
         } else {
-            emailMessage.innerHTML = "Must be valid email, with noroff.no og stud.noroff.no";
+            emailMessage.innerHTML = "Must be valid noroff email - noroff.no og stud.noroff.no";
         }
 
     } else {
@@ -73,7 +78,8 @@ function signUp (e) {
        
        if (validadedPassword) {
             validPassword = true;
-            passwordMessage.innerHTML = "Nice job";
+            passwordMessage.innerHTML = "";
+            password.classList.add("text-green-600")
 
         } else {
             validPassword = false;
@@ -93,11 +99,12 @@ function signUp (e) {
         if (matchingPasswords) {
             validConfirmPassword = true;
             console.log("yey password matching");
-            confirmPasswordMessage.innerHTML = "good";
+            confirmPasswordMessage.innerHTML = "";
+            confirmPassword.classList.add("text-green-600")
         }
         else {
             validConfirmPassword = false;
-            confirmPasswordMessage.innerHTML = "not matching";
+            confirmPasswordMessage.innerHTML = "Not matching";
         }
     } else {
         validConfirmPassword = false;
@@ -121,11 +128,13 @@ function signUp (e) {
         email: `${emailContent}`,
         password: `${passwordContent}`
     }
-    //console.log(signUpBody);
+    console.log(signUpBody);
 
     const inJSON = JSON.stringify(signUpBody);
 
-    register(inJSON);
+    if (validForm === true) {
+        register(inJSON);
+    }
 
 }
 
@@ -144,12 +153,12 @@ async function register(body) {
           if (response.ok) {
             console.log("success");
             console.log(data);
-            //window.location.replace('/index.html')
+            window.location.replace('/index.html')
           }
 
           else {
             console.log("error", data)
-            //Si ifra til bruker
+            errorMessage.innerHTML = data;
           }
     }
     

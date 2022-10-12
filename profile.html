@@ -7,9 +7,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"> 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;700&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet"> 
-    <title>Single post (get id here)</title>
-    <script type="module" src="./js/utils/components.js" defer></script>
-    <script type="module" src="./js/post.js" defer></script>
+    <title>Single profile (get id here)</title>
+
+    <script type="module" src="./js/utils/header.js" defer></script>
+    <script type="module" src="./js/profile.js" defer></script>
+
 
   </head>
   <body>
@@ -17,17 +19,15 @@
       <nav id="nav" class="flex flex-row justify-between items-center"></nav>
     </header>
     
-    <main>
+    <main class="mx-40">
 
-      <h1 class="text-2xl font-bold text-center p-20">Post</h1>
+      <h1 class="text-2xl font-bold text-center p-20">Profile</h1>
 
-      <section id="single-post" class="w-fit m-auto"></section>
+      <section id="single-profile" class="w-fit m-auto mb-6"></section>
+      <h2 class="pb-12 text-2xl font-josefine">Posts</h2>
+      <section id="single-profile-posts" class="flex flex-wrap gap-2 w-full justify-between"></section>
 
     </main>
-
-   
-
-
 
   </body>
 </html>
