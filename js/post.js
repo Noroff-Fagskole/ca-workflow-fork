@@ -3,8 +3,12 @@ import '../style.css'
 import { ALL_POSTS_URL } from "./endpoints/api";
 import {checkAccess} from "./utils/validation.js"
 import { getToken } from "./storage/storage";
-import {myHeader} from "./utils/header.js"
+import {userProfile} from "./utils/header.js"
 
+
+checkAccess(getToken());
+
+userProfile();
 
 const dayjs = require('dayjs')
 //import dayjs from 'dayjs' // ES 2015

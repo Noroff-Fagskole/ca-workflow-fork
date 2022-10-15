@@ -11,34 +11,29 @@
 
     <script type="module" src="./js/login.js" defer></script>
   </head>
-  <body class="bg-mainBeige">
+  <body class="bg-mainBackground bg-cover bg-right bg-no-repeat h-screen backdrop-brightness-60 md:bg-center lg:bg-right">
 
+      <header class="p-8 md:p-14">
+        <figure class="">
+          <img class="w-24 ml-auto md:w-30" src="./img/logo_white.svg">
+      </figure>
+    </header>
 
-    <main class="py-14 md:py-20">
+    <main class="mt-28 md:py-20 lg:mt-2 lg:pt-12 lg:pb-4">
 
-    <h1 class="pb-12 md:pb-20 flex flex-col items-center gap-4 font-josefine text-md font-light">
-      <img class="w-40" src="./img/socialapi_logo.svg">
-      - Where talented developers meet -
-    </h1>
-
-
-    <section class="flex flex-col justify-evenly items-center gap-20 md:gap-32 lg:flex-row">
-      <form id="login-form" class="flex flex-col w-60 md:w-72 gap-4 md:gap-6 text-center font-robotoC font-light">
-        <label class="uppercase pb-4 text-xl" for="form">Log in</label>
-        <label for="email">Email</label>
-          <input type="text" name="email" id="email" class="bg-mainBeige border-b border-b-gray-400 focus:outline-none h-8 px-2">
-          <span id="email-message"></span>
-        <label for="password">Password</label>
-          <input type="password" name="password" id="password" class="bg-mainBeige border-b border-b-gray-400 focus:outline-none h-8 px-2">
+    <section class="flex flex-col justify-evenly items-center gap-10 md:gap-32 text-white lg:gap-6">
+      <form id="login-form" class="flex flex-col w-3/4 md:w-1/2 gap-7 md:gap-9 text-center font-robotoC tracking-wide font-light lg:w-1/4">
+        <label class="pb-4 md:pb-20 text-2xl  md:text-3xl lg:text-5xl lg:pb-24" for="form">Welcome back</label>
+          <input type="text" name="email" id="email" placeholder="email" class="border-opacity-50 bg-transparent border border-white focus:outline-none h-14 rounded-md px-5 placeholder:text-white placeholder:font-robotoC placeholder:tracking-wide">
+          <input type="password" name="password" id="password" placeholder="password" class="border-opacity-50 bg-transparent border border-white focus:outline-none h-14 rounded-md px-5 placeholder:text-white placeholder:font-robotoC placeholder:tracking-wide">
           <span id="password-message"></span>
 
-          <button class="my-2 bg-white py-2 px-6 shadow-lg w-fit m-auto rounded-lg font-josefine" id="submitform" type="submit">Let's go</button>
+          <button class=" bg-white bg-opacity-20 py-2 border border-white px-10 shadow-lg w-fit m-auto rounded-md uppercase" id="submitform" type="submit">Log In</button>
       </form>
 
-      <div class="flex flex-col items-center w-60 font-robotoC font-light text-lg">
+      <div class="flex flex-col gap-1 items-center w-3/4 font-robotoC font-light text-lg mt-24 lg:mt-2 lg:text-sm">
         <p>Don't have an account yet?</p>
-        <p class="py-2">Let's get you one in no time!</p>
-        <button id="signUpButton" class=" py-2 px-10 mt-8 rounded-md border border-black shadow-md">Sign Up</button>
+        <a class="underline" href="signup.html"><p>Let's get you one in no time!</p></a>
       </div>
     </section>
 

@@ -3,11 +3,12 @@ import '../style.css'
 import { ALL_PROFILES_URL } from "./endpoints/api";
 import {checkAccess} from "./utils/validation.js"
 import { getToken } from "./storage/storage";
-import {myHeader} from "./utils/header.js"
+import {userProfile} from "./utils/header.js"
 
 
 checkAccess(getToken());
-myHeader();
+
+userProfile();
 
 const queryString = window.location.search;
 //console.log(queryString);
@@ -16,7 +17,7 @@ const profileID = new URLSearchParams(queryString).get('id');
 //console.log(postId);
 
 const ONE_PROFILE_URL = `${ALL_PROFILES_URL}${profileID}`;
-console.log(ONE_PROFILE_URL);
+//console.log(ONE_PROFILE_URL);
 
 const showProfile = document.getElementById("single-profile");
 const showPosts = document.getElementById("single-profile-posts");
