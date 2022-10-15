@@ -5,8 +5,12 @@ import { getToken, getUsername } from "./storage/storage";
 import { checkAccess, confirmingPassword } from './utils/validation';
 import {myInfo} from './utils/request-functions';
 import { postComment } from './utils/request-functions';
+import {userProfile} from "./utils/header.js"
 
-import {myHeader} from './utils/header.js';
+
+
+
+
 import { zip } from 'lodash';
 
 
@@ -22,10 +26,11 @@ dayjs.extend(relativeTime);
 
 checkAccess(getToken());
 
-myHeader();
+userProfile();
 
 
 const feed = document.getElementById("feed");
+const profiles = document.getElementById("listProfiles");
 
 const showPosts = document.getElementById("show-posts");
 const showProfiles = document.getElementById("show-profiles");
@@ -52,48 +57,6 @@ const queryString = window.location.search;
 //console.log(queryString);
 
 
-const userSection = document.getElementById("usersData");
-
-
-
-function userProfile() {
-    myInfo().then((value) => {
-        listProfileData(value);
-    })
-};
-userProfile();
-
-
-function listProfileData(data) {
-    console.log(data);
-
-    let profileImg = data.banner;
-    let profileName = data.name;
-    let followers = data.followers.length;
-    let following = data.following.length;
-
-    userSection.innerHTML = 
-    
-    `<a href="myprofile.html">
-    <div class="flex flex-col items-center p-6 gap-6 shadow-md rounded-md cursor-pointer fixed right-24">
-        <figure class="w-44 h-44">
-            <img class="h-full rounded-full object-cover shadow-md border border-white" src="${profileImg}">
-        </figure>
-        <p class="text-2xl tracking-wide font-josefine">${profileName}</p>
-        <div class="flex flex-row font-robotoC font-extralight gap-6 text-sm">
-            <div class="flex flex-col items-center">
-                <span class="font-normal text-2xl font-josefine">${followers}</span>
-                <p class="border rounded-md w-24 py-3 text-center">Followers</p>
-            </div>
-            <div class="flex flex-col items-center">
-                <span class="font-normal text-2xl font-josefine">${following}</span>
-                <p class="border rounded-md w-24 py-3 text-center">Following</p>
-            </div>
-        </div>
-    </div>
-    </a>
-    `
-}
 
 
 
@@ -102,7 +65,7 @@ function listProfileData(data) {
 async function allPosts() {
     
     try {
-        const response = await fetch(`${ALL_POSTS_URL}/?_author=true&_comments=true&limit=40`, {
+        const response = await fetch(`${ALL_POSTS_URL}/?_author=true&_comments=true&limit=10`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${getToken()}`,
@@ -189,7 +152,7 @@ function listPosts (data) {
     }
 
     if (post.media) {
-        media = `<img class="w-fit max-h-52 box-content object-scale-down rounded-md" src="${post.media}">`
+        media = `<img class="rounded-t-md w-full max-h-52 object-cover" src="${post.media}">`
     }
 
     if (post.media === "") {
@@ -254,12 +217,18 @@ function listPosts (data) {
 
   
         onePost = 
-        `<div class="bg-white drop-shadow-md rounded-lg flex flex-col py-4 px-4 md:px-8 w-full h-fit gap-4">
+        `<div class="bg-white drop-shadow-md rounded-lg flex flex-col pb-4 w-96 h-fit gap-4">
              <a href="post.html?id=${id}">
-                <div class="flex flex-col gap-4 p-4 w-full">
-                    <div class="flex flex-col gap-2 w-full">
-                        <h2 class="font-robotoC text-xl md:text-2xl uppercase font-normal tracking-wide w-max">${title}</h2>
-                        <p class="font-light text-sm"> //  ${creator}</p>
+                <div class="flex flex-col gap-4 w-full">
+                    <div class="w-full">
+                        <figure class="w-full">
+                         ${media}
+                        </figure>
+                    </div>
+                    <div class="flex flex-col gap-2 w-full items-center px-6">
+                    <p class="font-light text-sm"> //  ${creator}</p>
+                        <h2 class="font-robotoC text-xl md:text-2xl uppercase font-normal tracking-wide text-center">${title}</h2>
+                     
                         <p class="flex flex-row items-center gap-2 font-josefine text-sm font-light w-max">
                         <img class="h-4" src="../../img/clock.png">Posted ${created}
                         </p>
@@ -269,20 +238,16 @@ function listPosts (data) {
                         <hr class="w-full bg-mainBeige h-0.5">
                         <p class="font-robotoC font-light text-md leading-snug max-w-sm py-4">${content}</p>
                         <ul>${tags}</ul>
-                    </div>
-                    <div class=>
-                        <figure>
-                            ${media}
-                        </figure>
+                        <hr class="w-full bg-mainBeige h-0.5">
                     </div>
                 </div>
                 </a>
-                <div class="flex flex-col gap-8 w-full">
+                <div class="flex flex-col gap-8 w-full px-6">
                     <form id="${id}" class="commentForm flex flex-col gap-2">
-                        <input class="focus:border-none border border-mainBeige rounded-md w-full py-4 px-4 text-sm" type="text" name="comment" id="comment" placeholder="Comment on ${creator}s post">
+                        <input class="focus:outline-none border border-mainBeige rounded-md w-full py-2 px-4 text-sm" type="text" name="comment" id="comment" placeholder="Comment on ${creator}s post">
                         <button class="w-fit text-xs bg-mainBeige shadow-md py-2 px-4 rounded-md ml-auto">Comment</button>
                     </form>
-                    <div class="font-robotoC font-light bg-mainBeige rounded-md p-2">${allComments}</div>
+                    <div class="font-robotoC font-light bg-mainBeige px-2 py-3 text-sm">${allComments}</div>
                 </div>
             </div>`
   
@@ -311,6 +276,7 @@ function listPosts (data) {
                         requestBody = `{"body": "${commentContent}"}`;
                        
                     }
+
                 postComment(postId, requestBody);
             })
         }

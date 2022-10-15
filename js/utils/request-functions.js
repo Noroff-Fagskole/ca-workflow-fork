@@ -34,7 +34,6 @@ async function myInfo() {
 };
 
 
-
 async function postComment(postId, body) {
     console.log(body,postId);
     try {
@@ -64,6 +63,10 @@ async function postComment(postId, body) {
         console.log(error);
     }
 };
+
+
+
+
 
 
 

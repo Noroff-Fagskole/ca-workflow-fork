@@ -5,18 +5,15 @@ const nav = document.getElementById("nav");
 
 import '../../img/socialapi_logo.svg';
 
+/*
 
 
-
-let logo = `<a href="index.html"><img src="../../img/socialapi_logo.svg" class="inline-block rounded-full"></a>`;
+let logo = `<a href="index.html"><img src="../../img/logo_white.svg" class="inline-block"></a>`;
 
 async function getInfo() {
     const data = await myInfo();
     //console.log(data);
 }
-getInfo();
-
-
 
 function myHeader () {
 
@@ -65,7 +62,47 @@ function myHeader () {
     });
 }
 
+*/
+const userSection = document.getElementById("usersData");
 
 
 
-export {myHeader}
+function userProfile() {
+    myInfo().then((value) => {
+        listProfileData(value);
+    })
+};
+
+
+function listProfileData(data) {
+    console.log(data);
+
+    let profileImg = data.banner;
+    let profileName = data.name;
+    let followers = data.followers.length;
+    let following = data.following.length;
+
+    userSection.innerHTML = 
+    
+    `<a href="myprofile.html">
+    <div class="flex flex-col items-center gap-2 cursor-pointer text-white font-robotoC font-light">
+        <p class="text-5xl tracking-wide">${profileName}</p>
+        <div class="flex flex-row font-robotoC font-extralight gap-6 text-sm">
+            <div class="flex flex-col items-center">
+                <span class="font-normal text-2xl">${followers}</span>
+                <p class="text-center">Followers</p>
+            </div>
+            <div class="flex flex-col items-center">
+                <span class="font-normal text-2xl">${following}</span>
+                <p class="text-center">Following</p>
+            </div>
+        </div>
+    </div>
+    </a>
+    `
+}
+
+
+
+
+export {userProfile}

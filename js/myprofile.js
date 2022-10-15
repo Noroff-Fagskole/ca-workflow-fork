@@ -3,13 +3,14 @@ import { ALL_POSTS_URL, ALL_PROFILES_URL } from "./endpoints/api";
 import { getUsername, getToken } from "./storage/storage";
 import { checkAccess } from './utils/validation';
 import {myInfo} from './utils/request-functions';
-import { myHeader } from './utils/header';
+import { userProfile } from './utils/header.js';
 
 
 
 checkAccess(getToken());
 
-myHeader();
+userProfile();
+
 
 
 const dayjs = require('dayjs')
@@ -63,7 +64,7 @@ logOutButton.addEventListener("click", ()=> {
     }    
 });
 
-
+/*
 
 function userProfile() {
     myInfo().then((value) => {
@@ -101,7 +102,7 @@ function listProfileData(data) {
         </div>
     </div>
     `
-}
+}*/
 
 
 

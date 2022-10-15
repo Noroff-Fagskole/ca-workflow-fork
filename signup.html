@@ -12,54 +12,58 @@
     <script type="module" src="./js/signup.js" defer></script>
   </head>
 
-  <body class="bg-mainBeige">
-    <header class="px-12 pt-12 md:px-16 md:pt-16">
-      <a href="index.html"><img class="h-6 md:h-fit" src="./img/socialapi_logo.svg" alt="Logo"></a>
-    </header>
-    
-    <main class="mx-12 py-14 md:py-6">
-    
+  <body class="bg-mainBackground bg-cover bg-right bg-no-repeat h-screen md:bg-center">
 
-      <h1 class="pb-24 lg:pb-16 text-center font-josefine text-3xl font-light">
-        Sign Up
+    <header class="p-8 md:p-14 lg:pb-2">
+      <figure class="">
+        <img class="w-24 ml-auto md:w-30" src="./img/logo_white.svg">
+    </figure>
+  </header>
+    
+    <main class="mt-12 md:pt-14 md:pb-8 lg:p-0 lg:mt-2">
+    
+      <section class="lg:flex lg:flex-row-reverse lg:justify-center lg:gap-40 lg:items-center">
+      <h1 class="pb-14 md:text-4xl text-center font-josefine text-3xl font-light text-white lg:text-6xl">
+       Registrer
       </h1>
 
+     
+
+        <form id="sign-up-form" class="bg-darkBrown bg-opacity-80 m-auto shadow-md flex flex-col px-6 py-8 rounded-md gap-4 w-3/4 md:w-1/2 md:gap-6 text-center font-josefine font-light md:px-8 md:py-12 md:text-lg lg:gap-12 text-white text-sm lg:w-1/3 lg:p-16 lg:pb-2 lg:m-0 lg:bg-opacity-90">
+          <label for="username" class="relative">
+            <input type="text" name="username" id="username" placeholder="Username" class="px-4 border-opacity-50 bg-transparent border border-white focus:outline-none h-10 md:h-12 w-full rounded-md placeholder:text-gray-300 placeholder:tracking-wide">
+            <span class="absolute -bottom-8 right-0 whitespace-nowrap" id="username-message"></span>
+          </label>
+
+          <label for="email" class="relative">
+            <input type="text" name="email" id="email" placeholder="Email" class="px-4 border-opacity-50 bg-transparent border border-white focus:outline-none h-10 md:h-12 w-full rounded-md placeholder:text-gray-300 placeholder:tracking-wide">
+            <span class="absolute -bottom-8 right-0 whitespace-nowrap" id="email-message"></span>
+          </label>
+
+          <label for="password" class="relative">
+            <input type="password" name="password" id="password" placeholder="Password" class="px-4 border-opacity-50 bg-transparent border border-white focus:outline-none h-10 md:h-12 w-full rounded-md placeholder:text-gray-300 placeholder:tracking-wide">
+            <span class="absolute -bottom-8 right-0 whitespace-nowrap" id="password-message"></span>
+          </label>
+
+            <label for="confirm-password" class="relative">
+            <input type="password" name="confirm-password" id="confirm-password" placeholder="Confirm password" class="px-4 border-opacity-50 bg-transparent border border-white focus:outline-none h-10 md:h-12 w-full rounded-md placeholder:text-gray-300 placeholder:tracking-wide">
+            <span class="absolute -bottom-8 right-0 whitespace-nowrap" id="confirm-password-message"></span>
+          </label>
 
 
-    <form id="sign-up-form" class="m-auto flex flex-col w-full max-w-sm md:w-96 gap-4 md:gap-8 text-center font-robotoC font-light lg:gap-6">
-      <label for="username" class="flex flex-row gap-6 items-end whitespace-nowrap">
-        User name
-        <input type="text" name="username" id="username" class="bg-mainBeige border-b border-b-gray-400 focus:outline-none h-8 px-2 w-full text-lg">
-      </label>
-        <span id="username-message"></span>
+            <button class="w-fit m-auto py-2 px-10 mt-8 md:mt-2 rounded-md border text-darkBrown bg-white shadow-md" id="sign-up-button" type="submit">Sign Up</button>
+            <span id="error-message"></span>
+        </form>
 
-      <label for="email" class="flex flex-row gap-6 items-end whitespace-nowrap">
-        Email
-        <input type="text" name="email" id="email" class="bg-mainBeige border-b border-b-gray-400 focus:outline-none h-8 px-2 w-full text-lg">
-      </label>
-        <span id="email-message"></span>
+      </section>
 
-      <label for="password" class="flex flex-row gap-6 items-end whitespace-nowrap">
-        Password
-        <input type="password" name="password" id="password" class="bg-mainBeige border-b border-b-gray-400 focus:outline-none h-8 px-2 w-full text-lg">
-      </label>
-        <span id="password-message"></span>
-
-        <label for="confirm-password" class="flex flex-row gap-6 items-end whitespace-nowrap">
-          Confirm Password
-        <input type="password" name="confirm-password" id="confirm-password" class="bg-mainBeige border-b border-b-gray-400 focus:outline-none h-8 px-2 w-full text-lg">
-      </label>
-        <span id="confirm-password-message"></span>
+        <div class="flex flex-col items-center font-robotoC mt-20 text-white font-light md:text-lg md:tracking-wide lg:mt-12">
+            <p>Got an account after all?</p>
+            <a class="underline" href="login.html">Go back to log in</a>
+        </div>
 
 
-        <button class="w-fit m-auto py-2 px-10 mt-8 lg:mt-2 rounded-md border border-black shadow-md" id="sign-up-button" type="submit">Sign Up</button>
-        <span id="error-message"></span>
-    </form>
-
-    <div class="flex flex-col items-center mt-24   font-robotoC font-light gap-2">
-        <p>Got an account after all?</p>
-        <a class="underline text-lg" href="login.html">Go back to log in</a>
-    </div>
+    </main>
 
   
 
