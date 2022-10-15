@@ -17,6 +17,7 @@ module.exports = {
         'josefine': 'Josefin Sans',
         'robotoC': 'Roboto Condensed',
         'pretty': 'Times New Roman',
+        'lato': 'Lato',
       },
       backgroundImage: {
         'mainBackground': "url('./img/jeppe-monster-_j95TVqh9lg-unsplash.jpg')",
