@@ -6,11 +6,6 @@ import { checkAccess, confirmingPassword } from './utils/validation';
 import {myInfo} from './utils/request-functions';
 import { postComment } from './utils/request-functions';
 import {userProfile} from "./utils/header.js"
-
-
-
-
-
 import { zip } from 'lodash';
 
 
@@ -35,6 +30,19 @@ const profiles = document.getElementById("listProfiles");
 const showPosts = document.getElementById("show-posts");
 const showProfiles = document.getElementById("show-profiles");
 
+const newPostButton = document.getElementById("newPostButton");
+
+const queryString = window.location.search;
+
+const createPostForm = document.getElementById("create-post");
+const titleInput = document.getElementById("title"); 
+const contentInput = document.getElementById("body"); //opt
+const tagsInput = document.getElementById("tags"); //opt
+const mediaButton = document.getElementById("media-button"); //opt
+const submitButton = document.getElementById("submit");
+
+const search = document.getElementById("search")
+const showSearch = document.getElementById("showSearch")
 
 
 showPosts.addEventListener("click", function() {
@@ -43,6 +51,7 @@ showPosts.addEventListener("click", function() {
     allPosts();
     showPosts.disabled = true;
     showProfiles.disabled = false;
+    search.addEventListener("keyup", searchPosts)
 })
 
 showProfiles.addEventListener("click", function() {
@@ -51,14 +60,90 @@ showProfiles.addEventListener("click", function() {
     profileInfoForListing();
     showPosts.disabled = false;
     showProfiles.disabled = true;
+    search.addEventListener("keyup", searchProfiles) 
 })
 
-const queryString = window.location.search;
-//console.log(queryString);
+
+submitButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    validatePost();
+})
+
+search.addEventListener("keyup", searchPosts)
 
 
 
 
+function validatePost () {
+
+    let titleValue = titleInput.value;
+    let contentValue = contentInput.value;
+    let tagsValue = tagsInput.value;
+
+
+    let validTitle = false;
+    let validForm = false;
+
+
+    if (titleValue) {
+        validTitle = true;
+    }
+
+
+    const newPostBody = {
+        title: `${titleValue}`,
+    }
+
+    if (contentValue) {
+        newPostBody.body = `${contentValue}`;
+    }
+
+    if (tagsValue) {
+        newPostBody.tags = [];
+        newPostBody['tags'].push(tagsValue);     
+    }
+
+    //console.log(newPostBody);
+
+    const bodyInJSON = JSON.stringify(newPostBody);
+
+    if (validTitle) {
+        validForm = true;
+    }
+
+    if (validForm) {
+        requestPost(bodyInJSON);
+    }
+}
+
+
+async function requestPost(body) {
+    try {
+        const response = await fetch(ALL_POSTS_URL, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                Authorization: `Bearer ${getToken()}`,
+            },
+            body: body,
+        })
+
+        const data = await response.json();
+
+        if (response.ok) {
+            console.log(data);
+            window.location.reload();
+        }
+
+        else {
+            console.log("oh no" + data);
+        }
+    }
+
+    catch (error) {
+        console.log(error);
+    }
+}
 
 
 
@@ -95,20 +180,92 @@ async function allPosts() {
 allPosts();
 
 
-
-
 const theArr = [];
 function sendposts(posts) {
   
     for (let post of posts) {
         theArr.push(post)
     }
-
     return theArr;
 }
 
-console.log("hei",theArr)
 
+
+const profilesArray = [];
+function sendProfiles(profiles) {
+  
+    for (let profile of profiles) {
+        profilesArray.push(profile)
+    }
+    return profilesArray;
+}
+
+
+
+
+
+
+
+
+
+function searchPosts() {
+    let input, filter, ul, one, txtValue, id;
+    input = search;
+    filter = input.value.toUpperCase();
+    ul = theArr;
+    let showList = [];
+  
+    // Loop through all list items, and hide those who don't match the search query
+    for (let item of ul) {
+      one = item.title;
+      id = item.id;
+      txtValue = one;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        let element = ` <a href="post.html?id=${id}"><li class="list-none bg-white p-2 w-full">${one}</li></a>`;
+        showList.push(element)
+        showSearch.classList.replace("hidden", "flex")
+        showSearch.innerHTML = showList;
+     
+      } else {
+        console.log("fail")
+      }
+    }
+
+    if(input.value == "") {
+        showSearch.innerHTML = "";
+        showSearch.classList.replace("flex", "hidden")
+    }
+  }
+
+
+
+function searchProfiles() {
+    // Declare variables
+    var input, filter, ul, li, a, i, txtValue;
+    input = search;
+    filter = input.value.toUpperCase();
+    ul = profilesArray;
+    let showList = [];
+  
+    // Loop through all list items, and hide those who don't match the search query
+    for (let item of ul) {
+      a = item.name;
+      txtValue = a || a.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+       
+        let element = `<li>${item.name}</li>`
+        showList.push(element)
+        showSearch.innerHTML = showList;
+     
+      } else {
+        console.log("fail")
+      }
+    }
+
+    if(input.value == "") {
+        showSearch.innerHTML = "";
+    }
+  }
 
 
 
@@ -177,10 +334,7 @@ function listPosts (data) {
     }
 
     if (post.comments != "") {
-
-        console.log(post.comments);
   
-       
         let fullComment;
         let commentsArray = post.comments;
         let commentContent;
@@ -306,6 +460,7 @@ async function allProfiles(value) {
         if (response.ok) {
             //console.log("success");
             listProfiles(data, value);
+            sendProfiles(data)
 
         }
 
@@ -399,11 +554,11 @@ function listProfiles (data, value) {
     let plass = onlyNames.indexOf(name);
 
     if (plass !== -1) {
-        followButton = `<button id="${name}" disabled class="followButton bg-mainBeige py-2 px-4 rounded-full flex flex-row align-middle shadow-sm"><img class="h-5" src="../img/verified-user.png">Following</button>`;
-        unFollowButton = `<button id="${name}" class="unfollowButton hover:scale-105 bg-orange-100 py-2 px-4 rounded-full shadow-lg ">Unfollow</button>`
+        followButton = `<button id="${name}" disabled class="followButton bg-mainBeige py-2 px-4 rounded-md flex flex-row align-middle shadow-sm"><img class="h-5" src="../img/verified-user.png">Following</button>`;
+        unFollowButton = `<button id="${name}" class="unfollowButton hover:scale-105 bg-darkBrown text-white py-2 px-4 rounded-md shadow-lg ">Unfollow</button>`
     }
     else {
-        followButton = `<button id="${name}" class="followButton bg-mainBeige py-2 px-6 rounded-full shadow-lg hover:scale-105">Follow</button>`;
+        followButton = `<button id="${name}" class="followButton bg-mainBeige py-2 px-6 rounded-md shadow-lg hover:scale-105">Follow</button>`;
         unFollowButton = `<button id="${name}" class="unfollowButton hidden">Unfollow</button>`;
     }
 
