@@ -4,6 +4,7 @@ import { ALL_PROFILES_URL } from "./endpoints/api";
 import {checkAccess} from "./utils/validation.js"
 import { getToken } from "./storage/storage";
 import {userProfile} from "./utils/header.js"
+import {postComment} from './utils/request-functions.js';
 
 
 checkAccess(getToken());
@@ -120,21 +121,26 @@ function listProfile (profile) {
         else {postsHTML =  `<p><span class="font-semibold text-normal">${amountOfPosts}</span> Posts</p>`}
      }
 
+     document.title = `| ${name} |`;
+
+
 
     oneProfile = 
         `
-        <div class="pb-4 pt-4 px-4 bg-white max-w-sm flex flex-col items-center rounded-md text-center font-robotoC font-light text-sm cursor-pointer">
+        <div class="pb-4 pt-4 px-4 bg-white flex flex-col items-center rounded-md text-center font-robotoC font-light text-sm cursor-pointer">
             
-            <div class="relative border-2 border-mainBeige w-48 h-48 rounded-md pt-8 flex flex-col gap-2 hover:shadow-lg">
-                <figure class="absolute -top-20 left-10">
-                    <img class="w-28 h-28 rounded-full  shadow-md hover:shadow-lg" src=${avatar}>
+            <div class="border-2 border-mainBeige p-6 rounded-md flex items-center flex-row gap-12">
+                <figure>
+                    <img class="w-40 h-40 rounded-full shadow-md" src=${avatar}>
                 </figure> 
-                <h2 class="pt-4 text-xl font-semibold tracking-wide">${name}</h2>
-                <p class="text-sm pb-2">${email}</p>
-                <div>
-                    ${followersHTML}  |  Following ${amountOfFollowing}
+                <div class="flex flex-col gap-2">
+                    <h2 class="pt-4 text-xl font-semibold tracking-wide">${name}</h2>
+                    <p class="text-sm pb-2">${email}</p>
+                    <div>
+                        ${followersHTML}  |  Following ${amountOfFollowing}
+                    </div>
+                    ${postsHTML}
                 </div>
-                ${postsHTML}
             </div>
         </div>
         `
@@ -149,7 +155,6 @@ function listPosts (posts) {
 
     let onePost;
     let allComments = "";
-    let fullComment;
     let title;
     let content;
     let tags = [];
@@ -157,7 +162,7 @@ function listPosts (posts) {
     let updated;
     let created;
     let id;
-    let info;
+
 
     for (let post of posts) {
 
@@ -200,43 +205,9 @@ function listPosts (posts) {
     }
 
 
-    if (post.comments) {
-  
-        let commentsArray = post.comments;
-        let commentContent;
-        let commentId;
-        let commenter;
-        let originalPostId;
-        let commentCreated;
-        
-        for (let comment of commentsArray) {
 
-          
-            commentContent = comment.body;
-            commentId = comment.id;
-            commenter = comment.owner;
-            originalPostId = comment.postId;
-            commentCreated = dayjs().to(dayjs(comment.created));
-
-            fullComment =
-            `<div class="flex flex-col gap-2 my-4 px-6 items-end odd:items-start">
-                <p class="uppercase font-normal">${commenter}</p>
-                <div class="flex flex-col items-end gap-2">
-                    <p class="bg-white px-8 py-2 w-fit rounded-md">${commentContent}</p>
-                    <p class="flex flex-row items-center gap-2 font-josefine text-sm font-light">
-                        ${commentCreated}
-                    </p>
-                </div>
-            </div>
-            `
-            allComments += fullComment;
-
-        }
-    }
-    else {allComments = "No comments yet, be the first!"}
-  
         onePost = 
-         `<div class="bg-white drop-shadow-md rounded-lg flex flex-col py-8 px-8 justify-between items-start w-1/4 h-fit gap-8">
+         `<div class="bg-white drop-shadow-md rounded-lg flex flex-col py-8 px-8 justify-between items-start w-1/3 h-fit gap-8">
            <div class="flex flex-row gap-4 items-start justify-between p-4">
                <div class="flex flex-col gap-4 w-fit">
                    <h2 class="font-robotoC text-2xl uppercase font-normal tracking-wide">${title}</h2>
@@ -255,17 +226,9 @@ function listPosts (posts) {
                    </figure>
                </div>
            </div>
-           <div class="flex flex-col gap-8 w-full">
-               <form class="commentForm flex flex-col gap-2">
-                   <input class="focus:border-none border border-mainBeige rounded-md w-full py-4 px-4 text-sm" type="text" name="comment" id="comment" placeholder="Comment on post">
-                   <button class="w-fit text-xs bg-mainBeige shadow-md py-2 px-4 rounded-md ml-auto">Comment</button>
-               </form>
-               <div class="font-robotoC font-light bg-mainBeige rounded-md p-4">${allComments}</div>
-           </div>
-       </div>`
+   </div>`
 
        showPosts.innerHTML += onePost;
-
     }
     
 }

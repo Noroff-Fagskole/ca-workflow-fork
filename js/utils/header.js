@@ -85,15 +85,15 @@ function listProfileData(data) {
     userSection.innerHTML = 
     
     `<a href="myprofile.html">
-    <div class="flex flex-col items-center gap-2 cursor-pointer text-white font-robotoC font-light">
-        <p class="text-5xl tracking-wide">${profileName}</p>
+    <div class="flex flex-col items-center gap-2 cursor-pointer text-white font-lato font-light p-4">
+        <h2 class="text-4xl tracking-wide">${profileName}</h2>
         <div class="flex flex-row font-robotoC font-extralight gap-6 text-sm">
             <div class="flex flex-col items-center">
-                <span class="font-normal text-2xl">${followers}</span>
+                <span class="font-normal text-xl">${followers}</span>
                 <p class="text-center">Followers</p>
             </div>
             <div class="flex flex-col items-center">
-                <span class="font-normal text-2xl">${following}</span>
+                <span class="font-normal text-xl">${following}</span>
                 <p class="text-center">Following</p>
             </div>
         </div>

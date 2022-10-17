@@ -4,6 +4,7 @@ import { ALL_POSTS_URL } from "./endpoints/api";
 import {checkAccess} from "./utils/validation.js"
 import { getToken } from "./storage/storage";
 import {userProfile} from "./utils/header.js"
+import {postComment} from './utils/request-functions'
 
 
 checkAccess(getToken());
@@ -11,24 +12,14 @@ checkAccess(getToken());
 userProfile();
 
 const dayjs = require('dayjs')
-//import dayjs from 'dayjs' // ES 2015
-
-
 var relativeTime = require('dayjs/plugin/relativeTime')
 dayjs.extend(relativeTime);
 
-checkAccess(getToken());
-myHeader();
+
 
 const queryString = window.location.search;
-//console.log(queryString);
-
 const postId = new URLSearchParams(queryString).get('id');
-//console.log(postId);
-
 const ONE_POST_URL = `${ALL_POSTS_URL}/${postId}`;
-//console.log(ONE_POST_URL);
-
 const showPost = document.getElementById("single-post");
 
 
@@ -73,6 +64,7 @@ function listPost (data) {
         let updated;
         let id;
         let creator;
+
     
         if (data.title) {
             title = data.title;
@@ -118,9 +110,14 @@ function listPost (data) {
         if (data.id) {
             id = data.id
         }
+
+
+        document.title = `${title} | By ${creator}`;
     
-        if (data.comments) {
-      
+    
+        if (data.comments != "") {
+    
+            let fullComment;
             let commentsArray = data.comments;
             let commentContent;
             let commentId;
@@ -148,59 +145,62 @@ function listPost (data) {
                 </div>
                 `
                 allComments += fullComment;
-    
             }
         }
+        else {allComments = `<p class="text-center">No comments yet, be the first!</p>`}
     
-        else {allComments = "No comments yet, be the first!"}
+    
     
       
             onePost = 
-            `<div class="bg-white drop-shadow-md rounded-lg flex flex-col py-8 px-8 justify-between items-start w-full h-fit gap-8">
-                 <a href="post.html?id=${id}">
-                    <div class="flex flex-row gap-4 items-start justify-between p-4">
-                        <div class="flex flex-col gap-4 w-max">
-                            <h2 class="font-robotoC text-2xl uppercase font-normal tracking-wide w-max">${title}</h2>
-                            <p class="font-light text-sm"> //  ${creator}</p>
-                            <p class="font-robotoC font-light text-normal leading-snug max-w-sm">${content}</p>
-    
-                            <ul>${tags}</ul>
-        
+            `<div class=" flex flex-col pb-4 w-full h-fit gap-4">
+                    <div class="flex flex-col gap-4 w-full">
+                        <div class="w-full">
+                            <figure class="w-full">
+                             ${media}
+                            </figure>
+                        </div>
+                        <div class="flex flex-col gap-2 w-full items-center px-6">
+                        <p class="font-light text-sm"> //  ${creator}</p>
+                            <h2 class="font-robotoC text-xl md:text-2xl uppercase font-normal tracking-wide text-center">${title}</h2>
+                         
                             <p class="flex flex-row items-center gap-2 font-josefine text-sm font-light w-max">
-                                <img class="h-4" src="../../img/clock.png">Posted ${created}
+                            <img class="h-4" src="../../img/clock.png">Posted ${created}
                             </p>
-    
                             <p class="flex flex-row items-center gap-2 text-sm font-josefine font-extralight w-max">
                                 ${updated}
                             </p>
-                        </div>
-                        <div class="basis-1/2">
-                            <figure>
-                                ${media}
-                            </figure>
+                            <hr class="w-full bg-mainBeige h-0.5">
+                            <p class="font-robotoC font-light text-md leading-snug max-w-sm py-4">${content}</p>
+                            <ul>${tags}</ul>
+                            <hr class="w-full bg-mainBeige h-0.5">
                         </div>
                     </div>
-                    </a>
-                    <div class="flex flex-col gap-8 w-full">
-                        <form class="commentForm flex flex-col gap-2">
-                            <input class="focus:border-none border border-mainBeige rounded-md w-full py-4 px-4 text-sm" type="text" name="comment" id="comment" placeholder="Comment on ${creator}s post">
+                    <div class="flex flex-col gap-8 w-full px-6">
+                        <form id="${id}" class="commentForm flex flex-col gap-2">
+                            <input class="focus:outline-none border border-mainBeige rounded-md w-full py-2 px-4 text-sm" type="text" name="comment" id="comment" placeholder="Comment on ${creator}s post">
                             <button class="w-fit text-xs bg-mainBeige shadow-md py-2 px-4 rounded-md ml-auto">Comment</button>
                         </form>
-                        <div class="font-robotoC font-light bg-mainBeige rounded-md p-4">${allComments}</div>
+                        <div class="font-robotoC font-light bg-mainBeige px-2 py-3 text-sm">${allComments}</div>
                     </div>
                 </div>`
       
             showPost.innerHTML = onePost;
-        }
+       
     
+            
+          
             let commentForms = document.getElementsByClassName("commentForm");
             //console.log(commentForms);
+      
+            let requestBody;
     
+         
     
             for (let form of commentForms) {
                 form.addEventListener("submit", function(event) {
                     event.preventDefault();
-                    let requestBody;
+                    let postId = form.id;
                     let commentContent = form[0].value;
                         if (commentContent === "") {
                             requestBody = null;
@@ -208,12 +208,12 @@ function listPost (data) {
                         }
                         else {
                             requestBody = `{"body": "${commentContent}"}`;
+                           
                         }
-                    //console.log(requestBody);
-                    let postId = id;
+    
                     postComment(postId, requestBody);
-                    // legge alt som har med liste ut kommentarfeltet i en funksjon og kjøre igjen her
-                    
                 })
+            }
+        
  }
     
