@@ -3,39 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./img/socialapi_logo.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com"> 
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,300;1,400&family=Roboto+Condensed:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@100;200;300;400;500;700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,300;1,400&family=Roboto+Condensed:wght@300;400;700&display=swap"
+      rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="./js/login.js" defer></script>
   </head>
 
-  <body class="bg-mainBackground bg-cover bg-right bg-no-repeat h-screen backdrop-brightness-60 md:bg-center lg:bg-right">
+  <body
+    class="bg-mainBackground bg-cover bg-right bg-no-repeat h-screen backdrop-brightness-60 md:bg-center lg:bg-right">
     <header class="p-8 md:p-14">
       <figure class="">
-        <img class="w-24 ml-auto md:w-30" src="./img/logo_white.svg">
+        <img class="w-24 ml-auto md:w-30" src="./img/logo_white.svg" />
       </figure>
     </header>
     <main class="mt-28 md:mt-72 lg:mt-2 lg:pt-12 lg:pb-4">
-      <section class="flex flex-col justify-end items-center gap-16 md:gap-8 text-white font-lato tracking-wide font-light lg:gap-6">
+      <section
+        class="flex flex-col justify-end items-center gap-16 md:gap-8 text-white font-lato tracking-wide font-light lg:gap-6">
         <h1 class="pb-8 md:pb-20 text-3xl md:text-4xl lg:text-5xl lg:pb-24">
           Welcome back
         </h1>
-        <form id="login-form" class="flex flex-col w-3/4 md:w-1/2 gap-10 text-center lg:w-1/4">
+        <form
+          id="login-form"
+          class="flex flex-col w-3/4 md:w-1/2 gap-10 text-center lg:w-1/4">
           <label for="email" class="relative w-full">
-            <input type="text" name="email" id="email" placeholder="email" class="w-full border-opacity-50 bg-transparent border border-white focus:outline-none h-14 rounded-md px-5 placeholder:text-white placeholder:font-robotoC placeholder:tracking-wide">
-            <span class="absolute text-xs tracking-wide -bottom-6 right-0 whitespace-nowrap lg:text-sm" id="email-message"></span>
+            <input
+              type="text"
+              name="email"
+              id="email"
+              placeholder="email"
+              class="w-full border-opacity-50 bg-transparent border border-white focus:outline-none h-14 rounded-md px-5 placeholder:text-white placeholder:font-robotoC placeholder:tracking-wide" />
+            <span
+              class="absolute text-xs tracking-wide -bottom-6 right-0 whitespace-nowrap lg:text-sm"
+              id="email-message"></span>
           </label>
-            <label for="password" class="relative w-full">
-              <input type="password" name="password" id="password" placeholder="password" class="w-full border-opacity-50 bg-transparent border border-white focus:outline-none h-14 rounded-md px-5 placeholder:text-white placeholder:font-robotoC placeholder:tracking-wide">
-              <span id="password-message" class="absolute text-xs tracking-wide -bottom-6 right-0 whitespace-nowrap lg:text-sm"></span>
-            </label>
-            <button class="bg-white bg-opacity-10 py-2 border border-white px-10 shadow-lg w-fit m-auto rounded-sm uppercase text-sm font-normal hover:bg-white hover:text-black transition-colors duration-100 ease-in" id="submitform" type="submit">
-              Log In
-            </button>
+          <label for="password" class="relative w-full">
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="password"
+              class="w-full border-opacity-50 bg-transparent border border-white focus:outline-none h-14 rounded-md px-5 placeholder:text-white placeholder:font-robotoC placeholder:tracking-wide" />
+            <span 
+              id="password-message"
+              class="absolute text-xs tracking-wide -bottom-6 right-0 whitespace-nowrap lg:text-sm"></span>
+          </label>
+          <button
+            class="bg-white bg-opacity-10 py-2 border border-white px-10 shadow-lg w-fit m-auto rounded-sm uppercase text-sm font-normal hover:bg-white hover:text-black transition-colors duration-100 ease-in"
+            id="submitform"
+            type="submit">
+            Log In
+          </button>
         </form>
-        <span class="bg-white text-black h-12 w-full flex justify-center items-center whitespace-nowrap md:text-md invisible" id="error-message"></span>
-        <div class="flex flex-col gap-1 items-center w-3/4 text-sm md:mt-12  lg:mt-2 ">
+        <span
+          class="bg-white text-black h-12 w-full flex justify-center items-center whitespace-nowrap md:text-md invisible"
+          id="error-message"></span>
+        <div
+          class="flex flex-col gap-1 items-center w-3/4 text-sm md:mt-12 lg:mt-2">
           <p>Don't have an account yet?</p>
           <a class="underline" href="signup.html">
             <p>Let's get you one in no time!</p>

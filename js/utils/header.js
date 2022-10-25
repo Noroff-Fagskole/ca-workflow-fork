@@ -1,9 +1,8 @@
-
-import {myInfo} from './request-functions';
+import { myInfo } from "./request-functions";
 
 const nav = document.getElementById("nav");
 
-import '../../img/socialapi_logo.svg';
+import "../../img/socialapi_logo.svg";
 
 /*
 
@@ -65,26 +64,21 @@ function myHeader () {
 */
 const userSection = document.getElementById("usersData");
 
-
-
 function userProfile() {
-    myInfo().then((value) => {
-        listProfileData(value);
-    })
-};
-
+  myInfo().then((value) => {
+    listProfileData(value);
+  });
+}
 
 function listProfileData(data) {
-    console.log(data);
+  console.log(data);
 
-    let profileImg = data.banner;
-    let profileName = data.name;
-    let followers = data.followers.length;
-    let following = data.following.length;
+  let profileImg = data.banner;
+  let profileName = data.name;
+  let followers = data.followers.length;
+  let following = data.following.length;
 
-    userSection.innerHTML = 
-    
-    `<a href="myprofile.html">
+  userSection.innerHTML = `<a href="myprofile.html">
     <div class="flex flex-col items-center gap-2 cursor-pointer text-white font-lato font-light p-4">
         <h2 class="text-4xl tracking-wide">${profileName}</h2>
         <div class="flex flex-row font-robotoC font-extralight gap-6 text-sm">
@@ -99,10 +93,7 @@ function listProfileData(data) {
         </div>
     </div>
     </a>
-    `
+    `;
 }
 
-
-
-
-export {userProfile}
+export { userProfile };

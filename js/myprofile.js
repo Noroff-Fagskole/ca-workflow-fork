@@ -1,23 +1,17 @@
-import '../style.css'
+import "../style.css";
 import { ALL_POSTS_URL, ALL_PROFILES_URL } from "./endpoints/api";
 import { getUsername, getToken } from "./storage/storage";
-import { checkAccess } from './utils/validation';
-import {myInfo} from './utils/request-functions';
-import { userProfile } from './utils/header.js';
-
-
+import { checkAccess } from "./utils/validation";
+import { myInfo } from "./utils/request-functions";
+import { userProfile } from "./utils/header.js";
 
 checkAccess(getToken());
 
 userProfile();
 
-
-
-const dayjs = require('dayjs')
-var relativeTime = require('dayjs/plugin/relativeTime')
+const dayjs = require("dayjs");
+var relativeTime = require("dayjs/plugin/relativeTime");
 dayjs.extend(relativeTime);
-
-
 
 const userSection = document.getElementById("usersData");
 const myPostsURL = `${ALL_PROFILES_URL}${getUsername()}?_posts=true`;
@@ -33,9 +27,8 @@ const tagsInputEDIT = document.getElementById("tagsEDIT");
 const contentInputEDIT = document.getElementById("edit-body");
 const submitChangeButton = document.getElementById("submit-change-button");
 
-
 const createPostForm = document.getElementById("create-post");
-const titleInput = document.getElementById("title"); 
+const titleInput = document.getElementById("title");
 const contentInput = document.getElementById("body"); //opt
 const tagsInput = document.getElementById("tags"); //opt
 const mediaButton = document.getElementById("media-button"); //opt
@@ -44,25 +37,23 @@ const xOut = document.getElementById("exitButton");
 
 const settingsButton = document.getElementById("settingsButton");
 const logOutButton = document.getElementById("logOutButton");
-const editMediaSection = document.getElementById("edit-profile-media")
-const editMediaForm = document.getElementById("edit-media-form")
-const editAvatarInput = document.getElementById("change-avatar")
-const editBannerInput = document.getElementById("change-banner")
+const editMediaSection = document.getElementById("edit-profile-media");
+const editMediaForm = document.getElementById("edit-media-form");
+const editAvatarInput = document.getElementById("change-avatar");
+const editBannerInput = document.getElementById("change-banner");
 
 const avatarIMG = document.getElementById("avatarIMG");
 const bannerIMG = document.getElementById("bannerIMG");
 
-
 settingsButton.addEventListener("click", getUserInfo);
-logOutButton.addEventListener("click", ()=> {
-    let doubleCheck = confirm("Are you sure?");
-    if (doubleCheck === false) {
-        return;
-    }
-    else {
-        localStorage.clear();
+logOutButton.addEventListener("click", () => {
+  let doubleCheck = confirm("Are you sure?");
+  if (doubleCheck === false) {
+    return;
+  } else {
+    localStorage.clear();
     window.location.reload();
-    }    
+  }
 });
 
 /*
@@ -105,192 +96,161 @@ function listProfileData(data) {
     `
 }*/
 
-submitButton.addEventListener('click', function(event) {
-    event.preventDefault();
-    validatePost();
+submitButton.addEventListener("click", function (event) {
+  event.preventDefault();
+  validatePost();
+});
 
-})
+function validatePost() {
+  let titleValue = titleInput.value;
+  let contentValue = contentInput.value;
+  let tagsValue = tagsInput.value;
 
+  let validTitle = false;
+  let validForm = false;
 
-function validatePost () {
+  if (titleValue) {
+    validTitle = true;
+  }
 
-    let titleValue = titleInput.value;
-    let contentValue = contentInput.value;
-    let tagsValue = tagsInput.value;
+  const newPostBody = {
+    title: `${titleValue}`,
+  };
 
+  if (contentValue) {
+    newPostBody.body = `${contentValue}`;
+  }
 
-    let validTitle = false;
-    let validForm = false;
+  if (tagsValue) {
+    newPostBody.tags = [];
+    newPostBody["tags"].push(tagsValue);
+  }
 
+  //console.log(newPostBody);
 
-    if (titleValue) {
-        validTitle = true;
-    }
+  const bodyInJSON = JSON.stringify(newPostBody);
 
+  if (validTitle) {
+    validForm = true;
+  }
 
-    const newPostBody = {
-        title: `${titleValue}`,
-    }
-
-    if (contentValue) {
-        newPostBody.body = `${contentValue}`;
-    }
-
-    if (tagsValue) {
-        newPostBody.tags = [];
-        newPostBody['tags'].push(tagsValue);     
-    }
-
-    //console.log(newPostBody);
-
-    const bodyInJSON = JSON.stringify(newPostBody);
-
-    if (validTitle) {
-        validForm = true;
-    }
-
-    if (validForm) {
-        requestPost(bodyInJSON);
-    }
+  if (validForm) {
+    requestPost(bodyInJSON);
+  }
 }
-
 
 async function requestPost(body) {
-    try {
-        const response = await fetch(ALL_POSTS_URL, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                Authorization: `Bearer ${getToken()}`,
-            },
-            body: body,
-        })
+  try {
+    const response = await fetch(ALL_POSTS_URL, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: body,
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (response.ok) {
-            console.log(data);
-        }
-
-        else {
-            console.log("oh no" + data);
-        }
+    if (response.ok) {
+      console.log(data);
+    } else {
+      console.log("oh no" + data);
     }
-
-    catch (error) {
-        console.log(error);
-    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-
-
-
 (async function myPosts() {
-    
-    try {
-        const response = await fetch(myPostsURL, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${getToken()}`,
-            },
-        })
+  try {
+    const response = await fetch(myPostsURL, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (response.ok) {
-            console.log("success");
-            console.log(data.posts);
-            listPosts(data);
-        }
-
-        else {
-            console.log("error", data)
-        }
+    if (response.ok) {
+      console.log("success");
+      console.log(data.posts);
+      listPosts(data);
+    } else {
+      console.log("error", data);
     }
-
-    catch (error) {
-        console.log(error);
-    }
-
+  } catch (error) {
+    console.log(error);
+  }
 })();
 
-function listPosts ({posts}) {
-    console.log(posts);
+function listPosts({ posts }) {
+  console.log(posts);
 
-    let onePost;
-    let allComments = "";
-    let fullComment;
-    let title;
-    let content;
-    let tags = [];
-    let media;
-    let updated;
-    let created;
-    let id;
-  
+  let onePost;
+  let allComments = "";
+  let fullComment;
+  let title;
+  let content;
+  let tags = [];
+  let media;
+  let updated;
+  let created;
+  let id;
 
-    for (let post of posts) {
-
-
+  for (let post of posts) {
     if (post.title) {
-        title = post.title;
+      title = post.title;
     }
 
     if (post.body) {
-        content = post.body;
+      content = post.body;
     }
     if (post.tags) {
-      tags = post.tags
-
+      tags = post.tags;
     }
     if (post.media) {
-        media = post.media;
+      media = post.media;
     }
 
     if (post.media === "") {
-        media = "";
+      media = "";
     }
 
     if (post.created) {
-        let time = dayjs().to(dayjs(post.created));
-        created = time;
+      let time = dayjs().to(dayjs(post.created));
+      created = time;
     }
 
     if (post.updated) {
-        
-        let timeUpdated = dayjs().to(dayjs(post.updated));
-        if (timeUpdated !== created) {
-            updated =  `<img class="h-4" src="../../img/clock.png">Last updated ${timeUpdated}`;
-        }
-        else { updated = ""};
+      let timeUpdated = dayjs().to(dayjs(post.updated));
+      if (timeUpdated !== created) {
+        updated = `<img class="h-4" src="../../img/clock.png">Last updated ${timeUpdated}`;
+      } else {
+        updated = "";
+      }
     }
     if (post.id) {
-        id = post.id
+      id = post.id;
     }
 
-   
-
-
     if (post.comments) {
-  
-        let commentsArray = post.comments;
-        let commentContent;
-        let commentId;
-        let commenter;
-        let originalPostId;
-        let commentCreated;
-        
-        for (let comment of commentsArray) {
+      let commentsArray = post.comments;
+      let commentContent;
+      let commentId;
+      let commenter;
+      let originalPostId;
+      let commentCreated;
 
-          
-            commentContent = comment.body;
-            commentId = comment.id;
-            commenter = comment.owner;
-            originalPostId = comment.postId;
-            commentCreated = dayjs().to(dayjs(comment.created));
+      for (let comment of commentsArray) {
+        commentContent = comment.body;
+        commentId = comment.id;
+        commenter = comment.owner;
+        originalPostId = comment.postId;
+        commentCreated = dayjs().to(dayjs(comment.created));
 
-            fullComment =
-            `<div class="flex flex-col gap-2 my-4 px-6 items-end odd:items-start">
+        fullComment = `<div class="flex flex-col gap-2 my-4 px-6 items-end odd:items-start">
                 <p class="uppercase font-normal">${commenter}</p>
                 <div class="flex flex-col items-end gap-2">
                     <p class="bg-white px-8 py-2 w-fit rounded-md">${commentContent}</p>
@@ -299,15 +259,14 @@ function listPosts ({posts}) {
                     </p>
                 </div>
             </div>
-            `
-            allComments += fullComment;
-
-        }
+            `;
+        allComments += fullComment;
+      }
+    } else {
+      allComments = "No comments yet, be the first!";
     }
-    else {allComments = "No comments yet, be the first!"}
-  
-        onePost = 
-         `<div id="nr${id}" data-id="${id}" data-title="${title}" data-content="${content}" data-tags="${tags}" data-media="${media}" class="dataset bg-white drop-shadow-md rounded-lg flex flex-col pb-4 w-96 h-fit gap-4">
+
+    onePost = `<div id="nr${id}" data-id="${id}" data-title="${title}" data-content="${content}" data-tags="${tags}" data-media="${media}" class="dataset bg-white drop-shadow-md rounded-lg flex flex-col pb-4 w-96 h-fit gap-4">
             <a href="post.html?id=${id}" class="z-10">
                 <div class="flex flex-row gap-4 items-start justify-between p-4">
                     <div class="flex flex-col gap-4 w-full">
@@ -349,288 +308,251 @@ function listPosts ({posts}) {
                 <button id="${id}" class="deleteButton bg-amber-900 shadow-md py-2 px-5 rounded-md"><img class="w-6" src="../img/trash_white.svg"></button>
             </div>
         </div>
-     `
+     `;
 
-        myPosts.innerHTML += onePost;
+    myPosts.innerHTML += onePost;
 
+    const editButtons = document.getElementsByClassName("editButton");
+    const deleteButtons = document.getElementsByClassName("deleteButton");
 
-      
-       
-        
+    let buttonId;
 
-        const editButtons = document.getElementsByClassName("editButton");
-        const deleteButtons = document.getElementsByClassName("deleteButton");
-
-
-        let buttonId;
-      
-     
-
-       
-        for (let button of editButtons) {
-            button.addEventListener("click", function (event) {
-                event.preventDefault();
-                buttonId = button.id;
-                console.log(buttonId);
-                beforeEdit(buttonId);
-            })
-        }
-
-
-        for (let button of deleteButtons) {
-            button.addEventListener("click", function (event) {
-                event.preventDefault();
-                buttonId = button.id;
-                //console.log(buttonId);
-               deletePost(buttonId);
-            })
-        }
-
-
-        function beforeEdit (buttonId) {
-            const div = document.getElementById(`nr${buttonId}`);
-            let postId = div.dataset.id;
-            let postTitle = div.dataset.title;
-            let postContent = div.dataset.content;
-            let postMedia = div.dataset.media;
-            let postTags = div.dataset.tags;
-            editPost(postId, postTitle, postContent, postMedia, postTags)
-        }
-
-  
+    for (let button of editButtons) {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        buttonId = button.id;
+        console.log(buttonId);
+        beforeEdit(buttonId);
+      });
     }
+
+    for (let button of deleteButtons) {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        buttonId = button.id;
+        //console.log(buttonId);
+        deletePost(buttonId);
+      });
+    }
+
+    function beforeEdit(buttonId) {
+      const div = document.getElementById(`nr${buttonId}`);
+      let postId = div.dataset.id;
+      let postTitle = div.dataset.title;
+      let postContent = div.dataset.content;
+      let postMedia = div.dataset.media;
+      let postTags = div.dataset.tags;
+      editPost(postId, postTitle, postContent, postMedia, postTags);
+    }
+  }
 }
 
+function editPost(id, title, content, media, tags) {
+  console.log(id, title);
 
+  let validForm = false;
+  let postID;
 
-function editPost (id, title, content, media, tags) {
-    console.log(id, title);
+  editSection.classList.remove("hidden");
 
-    let validForm = false;
-    let postID;
+  xOut.addEventListener("click", function (event) {
+    editSection.classList.add("hidden");
+  });
 
+  if (id) {
+    postID = id;
+  }
 
+  if (title) {
+    titleInputEDIT.value = title;
+  }
 
-    editSection.classList.remove("hidden");
-  
+  if (content) {
+    contentInputEDIT.value = content;
+  }
 
-    xOut.addEventListener("click", function(event) {
-            editSection.classList.add("hidden");
-    })
+  if (tags) {
+    tagsInputEDIT.value = tags;
+  }
+  if (media) {
+    mediaInputEDIT.value = media;
+  }
 
-    
-    if (id) {
-        postID = id;
-    }
+  let alteredTitle;
+  let alteredContent;
+  let alteredTags;
+  let alteredMedia;
 
-    if (title) {
-        titleInputEDIT.value = title;
-    }
+  submitChangeButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    console.log(postID);
+    alteredTitle = titleInputEDIT.value;
+    alteredContent = contentInputEDIT.value;
+    alteredTags = tagsInputEDIT.value;
+    alteredMedia = mediaInputEDIT.value;
+    const theBody = updateBody(
+      alteredTitle,
+      alteredContent,
+      alteredTags,
+      alteredMedia
+    );
+    console.log(theBody);
+    requestChange(theBody, postID);
+  });
 
-    if (content) {
-        contentInputEDIT.value = content;
-    }
+  let updatedBody;
 
-    if (tags) {
-        tagsInputEDIT.value = tags;
-    }
-    if (media) {
-        mediaInputEDIT.value = media;
-    }
-
-   
-
-
-
-
-    let alteredTitle;
-    let alteredContent;
-    let alteredTags;  
-    let alteredMedia;
-
-
-
-
-    submitChangeButton.addEventListener("click", function (event) {
-        event.preventDefault();
-        console.log(postID);
-        alteredTitle = titleInputEDIT.value;
-        alteredContent = contentInputEDIT.value;
-        alteredTags = tagsInputEDIT.value;
-        alteredMedia = mediaInputEDIT.value;
-        const theBody = updateBody(alteredTitle, alteredContent, alteredTags, alteredMedia);
-        console.log(theBody);
-        requestChange(theBody, postID);
-    })  
-    
-    let updatedBody;
-
-
-    function updateBody (title, content, tags, media) {
-        updatedBody = {
-            title: `${title}`,
-            body: `${content}`,
-            tags: `${tags}`,
-            media: `${media}`
-        }
-        console.log(updatedBody);
-        let jsonBody =  JSON.stringify(updatedBody);
-        return jsonBody;
-    }
+  function updateBody(title, content, tags, media) {
+    updatedBody = {
+      title: `${title}`,
+      body: `${content}`,
+      tags: `${tags}`,
+      media: `${media}`,
+    };
+    console.log(updatedBody);
+    let jsonBody = JSON.stringify(updatedBody);
+    return jsonBody;
+  }
 }
 
 async function requestChange(body, id) {
-    
-    try {
-        const response = await fetch(`${ALL_POSTS_URL}/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                Authorization: `Bearer ${getToken()}`,
-            },
-            body: body,
-        })
+  try {
+    const response = await fetch(`${ALL_POSTS_URL}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: body,
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (response.ok) {
-            console.log("success");
-            //console.log(data);
-            window.location.reload();
-        }
-        else {
-            console.log("error", data)
-        }
+    if (response.ok) {
+      console.log("success");
+      //console.log(data);
+      window.location.reload();
+    } else {
+      console.log("error", data);
     }
-
-    catch (error) {
-        console.log(error);
-    }
-
-};
-
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 async function deletePost(id) {
-    
-    try {
-        const response = await fetch(`${ALL_POSTS_URL}/${id}`, {
-            method: 'DELETE',
-            headers: {
-                Authorization: `Bearer ${getToken()}`,
-            },
-        })
+  try {
+    const response = await fetch(`${ALL_POSTS_URL}/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (response.ok) {
-            console.log("success");
-            //console.log(data);
-            //window.location.reload();
-        }
-        else {
-            console.log("error", data)
-        }
+    if (response.ok) {
+      console.log("success");
+      //console.log(data);
+      //window.location.reload();
+    } else {
+      console.log("error", data);
     }
-
-    catch (error) {
-        console.log(error);
-    }
-
-};
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 function getUserInfo() {
-    myInfo().then((value) => {
-        showProfileMedia(value);
-    })
-};
+  myInfo().then((value) => {
+    showProfileMedia(value);
+  });
+}
 
+function showProfileMedia(data) {
+  let banner;
+  let avatar;
+  let profileName = data.name;
 
-function showProfileMedia (data) {
+  if (data.banner) {
+    banner = data.banner;
+  }
 
-    let banner;
-    let avatar;
-    let profileName = data.name;
+  if (data.avatar) {
+    avatar = data.avatar;
+  }
 
-    if(data.banner) {
-        banner = data.banner;
-    }
+  editMediaSection.classList.remove("hidden");
+  editMediaSection.classList.add("absolute");
 
-    if(data.avatar) {
-        avatar = data.avatar;
-    }
-
-    editMediaSection.classList.remove("hidden");
-    editMediaSection.classList.add("absolute");
-
-    document.addEventListener("click", function(event) {
-        if( !event.target.closest(".modal")) {
-            closeOverlay();
-        }
-    },false)
-
-    function closeOverlay() {
-        editMediaSection.classList.add("hidden");
-        editMediaSection.classList.remove("absolute");
+  document.addEventListener(
+    "click",
+    function (event) {
+      if (!event.target.closest(".modal")) {
+        closeOverlay();
       }
+    },
+    false
+  );
 
-    editAvatarInput.value = avatar;
-    editBannerInput.value = banner;
+  function closeOverlay() {
+    editMediaSection.classList.add("hidden");
+    editMediaSection.classList.remove("absolute");
+  }
 
-    let alteredAvatar;
-    let alteredBanner;
+  editAvatarInput.value = avatar;
+  editBannerInput.value = banner;
 
-    let avatarImg = `<img class="h-full w-full rounded-full object-cover" src="${avatar}">`;
-    avatarIMG.innerHTML = avatarImg;
+  let alteredAvatar;
+  let alteredBanner;
 
-    let bannerImg = `<img class="h-full w-full rounded-full object-cover" src="${banner}">`;
-    bannerIMG.innerHTML = bannerImg;
+  let avatarImg = `<img class="h-full w-full rounded-full object-cover" src="${avatar}">`;
+  avatarIMG.innerHTML = avatarImg;
 
-    editMediaForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        alteredAvatar = editAvatarInput.value;
-        alteredBanner = editBannerInput.value;
-        let mediaBody = updateMedia(alteredBanner, alteredAvatar);
-        console.log(mediaBody)
-        requestMediaChange(mediaBody, profileName);
-    })
+  let bannerImg = `<img class="h-full w-full rounded-full object-cover" src="${banner}">`;
+  bannerIMG.innerHTML = bannerImg;
 
-    function updateMedia (banner, avatar) {
-        let newBody = {
-            banner: `${banner}`,
-            avatar: `${avatar}`
-        }
-        console.log(newBody);
-        let inJSON =  JSON.stringify(newBody);
-        return inJSON;
-    }
+  editMediaForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    alteredAvatar = editAvatarInput.value;
+    alteredBanner = editBannerInput.value;
+    let mediaBody = updateMedia(alteredBanner, alteredAvatar);
+    console.log(mediaBody);
+    requestMediaChange(mediaBody, profileName);
+  });
+
+  function updateMedia(banner, avatar) {
+    let newBody = {
+      banner: `${banner}`,
+      avatar: `${avatar}`,
+    };
+    console.log(newBody);
+    let inJSON = JSON.stringify(newBody);
+    return inJSON;
+  }
 }
 
 async function requestMediaChange(body, name) {
-    
-    try {
-        const response = await fetch(`${ALL_PROFILES_URL}${name}/media`, {
-            method: 'PUT',
-            headers: {
-                'Content-type': 'application/json; charset=UTF-8',
-                Authorization: `Bearer ${getToken()}`,
-            },
-            body: body,
-        })
+  try {
+    const response = await fetch(`${ALL_PROFILES_URL}${name}/media`, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: body,
+    });
 
-        const data = await response.json();
+    const data = await response.json();
 
-        if (response.ok) {
-            console.log("success");
-            //console.log(data);
-            window.location.reload();
-        }
-        else {
-            console.log("error", data)
-        }
+    if (response.ok) {
+      console.log("success");
+      //console.log(data);
+      window.location.reload();
+    } else {
+      console.log("error", data);
     }
-
-    catch (error) {
-        console.log(error);
-    }
-
-};
+  } catch (error) {
+    console.log(error);
+  }
+}
