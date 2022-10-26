@@ -20,19 +20,26 @@
     "preview": "vite preview",
     "pretty": "npx prettier --write .",
     "checkPretty": "npx prettier --check .",
+    "quickPretty": "pretty-quick",
     "prepare": "husky install"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "vite"
+    }
   },
   "devDependencies": {
     "autoprefixer": "^10.4.12",
     "husky": "^8.0.1",
     "lodash": "^4.17.21",
     "postcss": "^8.4.16",
+    "prettier": "^2.7.1",
+    "pretty-quick": "^3.1.3",
     "tailwindcss": "^3.1.8",
     "vite": "^3.1.0"
   },
   "dependencies": {
     "dayjs": "^1.11.5",
-    "prettier": "^2.7.1",
     "vite-plugin-require": "^1.0.5"
   }
 }
