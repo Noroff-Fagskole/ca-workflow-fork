@@ -24,7 +24,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "vite"
+      "pre-commit": "npm run vite"
     }
   },
   "devDependencies": {
