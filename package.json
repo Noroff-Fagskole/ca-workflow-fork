@@ -20,7 +20,8 @@
     "preview": "vite preview",
     "pretty": "npx prettier --write .",
     "checkPretty": "npx prettier --check .",
-    "quickPretty": "pretty-quick"
+    "quickPretty": "pretty-quick",
+    "prepare": "husky install"
   },
   "husky": {
     "hooks": {
