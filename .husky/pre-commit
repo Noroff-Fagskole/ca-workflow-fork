@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-checkPretty
+
+npm run checkPretty
+npm run build
