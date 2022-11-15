@@ -20,12 +20,8 @@
     "preview": "vite preview",
     "pretty": "npx prettier --write .",
     "checkPretty": "npx prettier --check .",
-    "quickPretty": "pretty-quick"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run dev"
-    }
+    "quickPretty": "pretty-quick",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.12",
