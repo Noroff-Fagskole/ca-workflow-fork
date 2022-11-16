@@ -2,5 +2,5 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 
-npm run checkPretty
+npm run pretty
 npm run build

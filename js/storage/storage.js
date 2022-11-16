@@ -32,3 +32,5 @@ function getStoredData(key) {
 }
 
 export { saveToken, saveUser, getToken, getUsername };
+
+module.exports = saveToken;
